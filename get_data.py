@@ -13,7 +13,7 @@ def daterange(start_date, end_date):
         yield single_date.strftime('%Y-%m-%d')
 
 def get_data():
-#Get dataframe of cities
+  #Get dataframe of cities
   cities = pd.read_csv('ongoing_cities.csv', headers = True)
 
   headers = ["id", "header", "body", "bedrooms", "bathrooms", "sqft", 
@@ -23,8 +23,9 @@ def get_data():
   for row in cities:
     city = row.city_code
     state = row.state_code
-    city_df = pd.DataFrame
+    city_df = pd.DataFrame(columns=headers)
 
+    #Append data to city_df
     for date in daterange(start_date, end_date):
       i=0
       while i:
@@ -33,14 +34,17 @@ def get_data():
         data_hash = r.json() 
         if len(data_hash) > 0:
           results = parse_info(data_hash)
-          city_csv.append(results)
+          results_df = pd.DataFrame(results)
+          city_df = pd.concat(city_df, results_df)
           i=+1   
         else:
           break
 
-    csv.writer('csvs/%s_%s.csv', 'wb+') %(city, state)
+    #Write city_df to a csv 
+    city_df.to_csv('csvs/%s_%s.csv', 'wb+') %(city, state)
 
-def parse_info(data_hash):
+def parse_info(data_hash, headers):
+  results_df = pd.DataFrame(columns = headers)
   for apt in data_hash:
     header = apt_info['heading']
     body = apt_info['body']
@@ -54,6 +58,6 @@ def parse_info(data_hash):
     rooms = apt_info['annotations']['bedrooms']
     parking = apt_info['annotations']['carport']
     washer_dryer = apt_info['annotations']['w_d_in_unit']
-
+    
 
 
