@@ -1,0 +1,31 @@
+-Look into using redshift for getting data
+
+-Don't worry about de-duping until model is built
+
+-amenity-adding: start with brute force, string-matching
+
+-get 10000 or so most recent listings from one city
+
+-clean and parse this data
+
+-80/20 train-test split
+
+-use a few different models to compare accuracy
+
+-perhaps group data with classification model (into pricing tiers?), do regressions within each group (classification + regression)
+    -Simplest: Classify each unit as either below market average or above market average relative to area and number of bedrooms
+
+-create separate csv of new-found amenities from external sources or text analysis
+
+-Get neighborhood crime data, walkscore (maybe not necessary if i just have neighborhood price averages?)
+
+-Keep the data as raw as possible, can do other things to it, don't delete what i started with
+
+-Fraud detection, look into craigslist fraud guide
+
+-Can use zillow/trulia to get actual property value?
+
+-How to get neighborhood price averages if I only have lat and lon?
+    -Add features to each listing: Neighborhood averages for 1bd, 2bd, 3bd, etc...
+    -Or just a neighborhood weight coefficient 
+
