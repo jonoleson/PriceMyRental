@@ -1,7 +1,5 @@
 import pandas as pd
-import csv
 from datetime import timedelta, date
-import requests
 
 start_date = date(2014, 9, 28)
 end_date = date(2014, 10, 28)
@@ -12,43 +10,39 @@ def daterange(start_date, end_date):
         single_date = start_date + timedelta(n)
         yield single_date.strftime('%Y-%m-%d')
 
-def get_data():
+def get_data(start_date, end_date):
   #Get dataframe of cities
-  cities = pd.read_csv('ongoing_cities.csv', headers = True)
+  cities = pd.read_csv('ongoing_cities.csv', header = False)
 
-  ''' 
-  Target headers will look like:
-  headers = ["id", "header", "body", "bedrooms", "bathrooms", "sqft", 
-             "timestamp", "price", "external_url", "lat", "lon", 
-             "accuracy", "address", "parking", "washer_dryer", "pet"]   
-  '''
-  # Headers for the dataframes loaded by pd.read_json()
-  headers = ['annotations', 'body', 'category', 'expires', 'external_url', 'flagged_status', 
-             'heading', 'id', 'immortal', 'location', 'price', 'source', 'timestamp']
+  # Headers for our target dataframe
+  cols = ['heading', 'body', 'price', 'lat', 'long', 'region', 'neighborhood', 
+             'beds', 'baths', 'parking', 'washer_dryer']
 
-  for row in cities:
-    city = row.city_code
-    state = row.state_code
-    city_df = pd.DataFrame(columns=headers)
+  for i in xrange(len(cities)):
+    city = cities.city_code[i]
+    state = cities.state_code[i]
+    city_df = pd.DataFrame(columns=cols)
 
     #Append data to city_df
     for date in daterange(start_date, end_date):
       done_parsing = False
 
-      while done_parsing = False:
+      while done_parsing == False:
         url = 'https://s3-us-west-2.amazonaws.com/hoodsjson/%s/%s/%s/%s.html' %(state, city, date, i)
         
         #Read json into pandas dataframe
         raw_df = pd.read_json(url)
+
         #Filter df for only craigslist data
         condition = raw_df['source'] == 'CRAIG'
         raw_df = raw_df[condition]
+        raw_df = raw_df.reset_index()
+        del raw_df['index']
 
         #Test if loaded df has any data
         if len(raw_df) > 0:
-          results = parse_info(raw_df, headers)
-          results_df = pd.DataFrame(results)
-          city_df = pd.concat(city_df, results_df)
+          results_df = parse_info(raw_df, cols)
+          city_df = city_df.append(results_df)
           i=+1   
         else:
           done_parsing = True
@@ -56,34 +50,55 @@ def get_data():
     #Write city_df to a csv 
     city_df.to_csv('csvs/%s_%s.csv', 'wb+') %(city, state)
 
-def parse_info(df, headers):
-  results_df = pd.DataFrame(columns = headers, index = xrange(len(df)))
-  for i, apt in enumerate(df):
-    results_df['header'][i] = apt['heading']
-    results_df['body'][i] = apt['body']
-    results_df['price'][i] = apt['price']
-    results_df['lat'][i] = apt['location']['lat']
-    results_df['lon'][i] = apt['location']['long']
-    results_df['accuracy'][i] = apt['location']['accuracy']
-    results_df['address'][i] = apt['location']['formatted_address']
-    results_df['beds'][i] = apt['annotations']['bedrooms']
-    results_df['baths'][i] = apt['annotations']['bathrooms']
-    
-    if 'street_parking' in apt['annotations'][0]:
-      results_df['parking'][i] = 1
-    elif 'carport' in apt['annotations'][0]:
-      results_df['parking'][i] = 2
-    elif 'off_street_parking' in apt['annotations'][0]:
-      results_df['parking'][i] = 3
-    elif 'attached_garage' in apt['annotations'][0]:
-      results_df['parking'][i] = 4
-    else:
-      results_df['parking'][i] = 0
-
-    results_df['parking'][i] = apt['annotations']['carport']
-    results_df['washer_dryer'][i] = apt['annotations']['w_d_in_unit']
-
+def parse_info(df, cols):
+  results_df = pd.DataFrame(columns = cols, index = xrange(len(df)))
+  results_df['heading'] = df['heading']
+  results_df['body'] = df['body']
+  results_df['price'] = df['price']
   results_df['date'] = pd.to_datetime(df['timestamp'], unit='s')
+
+  for i in xrange(len(df)):
+    if 'lat' and 'long' in df.iloc[i]['location']:
+      results_df.ix[i,'lat'] = float(df.iloc[i]['location']['lat'])
+      results_df.ix[i,'long'] = float(df.iloc[i]['location']['long'])
+    else:
+      results_df.ix[i,'lat'] = None
+      results_df.ix[i,'long'] = None 
+
+    if 'source_subloc' in df.iloc[i]['annotations']:
+      results_df.ix[i, 'region'] = df.iloc[i]['annotations']['source_subloc']
+
+    if 'source_neighborhood' in df.iloc[i]['annotations']:
+      results_df.ix[i, 'neighborhood'] = df.iloc[i]['annotations']['source_neighborhood']
+    else:
+      results_df.ix[i, 'neighborhood'] = None
+
+    if 'bedrooms' in df.iloc[i]['annotations']:
+      results_df.ix[i, 'beds'] = int(df.iloc[i]['annotations']['bedrooms'][0])
+    else:
+      results_df.ix[i, 'beds'] = None
+
+    if 'bathrooms' in df.iloc[i]['annotations']:
+      results_df.ix[i, 'baths'] = int(df.iloc[i]['annotations']['bathrooms'][0])
+    else:
+      results_df.ix[i, 'baths'] = None
+    
+    if 'street_parking' in df.iloc[i]['annotations']:
+      results_df.ix[i, 'parking'] = 1
+    elif 'carport' in df.iloc[i]['annotations']:
+      results_df.ix[i, 'parking'] = 2
+    elif 'off_street_parking' in df.iloc[i]['annotations']:
+      results_df.ix[i, 'parking'] = 3
+    elif 'attached_garage' in df.iloc[i]['annotations']:
+      results_df.ix[i, 'parking'] = 4
+    else:
+      results_df.ix[i, 'parking'] = 0
+
+    if 'w_d_in_unit' in df.iloc[i]['annotations']:
+      results_df.ix[i, 'washer_dryer'] = 1
+    else:
+      results_df.ix[i, 'washer_dryer'] = 1
+
   return results_df
 
 
