@@ -37,6 +37,8 @@
         -valet
         -designer
         -stainless
+
+-Subset data for a homogenous set (eg, 2 bedrooms in the castro), then analyze what textual features of the description are highly correlated with upticks or downticks in price
         
 -How to get neighborhood price averages if I only have lat and lon?
     -Add features to each listing: Neighborhood averages for 1bd, 2bd, 3bd, etc...

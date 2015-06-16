@@ -21,7 +21,7 @@ def get_data(start_date, end_date, one_city=False):
   if one_city==True:
     cities = cities[(cities['city'] == 'San Francisco')]
 
-  if one_city=True:
+  if one_city==True:
     cities = cities['city'] == 'San Francisco'
 
   for i in xrange(len(cities)):
@@ -49,8 +49,7 @@ def get_data(start_date, end_date, one_city=False):
           print 'No data this day'
           break
 
-
-        #Test if loaded df has any data (an empty JSON file always concludes the )
+        #Test if loaded df has any data (the last json file of a day that contains data is always valid but empty)
         if len(raw_df) > 0:
           #Filter df for only craigslist data
           condition = raw_df['source'] == 'CRAIG'
@@ -65,7 +64,7 @@ def get_data(start_date, end_date, one_city=False):
           done_parsing = True
 
     #Write city_df to a csv inside a 'data' folder. End result should be a csv file for each city
-    city_df.to_csv('data/csvs/%s_%s.csv' %(city, state), index=False, encoding='utf-8') 
+    city_df.to_csv('data/%s_%s.csv' %(city, state), index=False, encoding='utf-8') 
 
 
 def parse_info(df, cols):
