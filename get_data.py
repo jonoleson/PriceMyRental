@@ -21,6 +21,9 @@ def get_data(start_date, end_date, one_city=False):
   if one_city==True:
     cities = cities[(cities['city'] == 'San Francisco')]
 
+  if one_city=True:
+    cities = cities['city'] == 'San Francisco'
+
   for i in xrange(len(cities)):
     if one_city==False:
       city = cities.city_code[i]

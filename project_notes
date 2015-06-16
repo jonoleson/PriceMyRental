@@ -44,7 +44,11 @@
     -Apply clustering to lat/lon data?
     	-Geographical dividers (freeways/infrastructure, severe topography could complicate geographical clustering) 
     	-Weighted linear clustering 
+<<<<<<< HEAD
     -Zillow API may have neighborhood boundary data
     -If starting with just San Francisco, nearly all data points have neighborhood attributes (craigslist sf is set up so that posters will almost always select a neighborhood)
+=======
+    	-Zillow API may have neighborhood boundary data
+>>>>>>> 70dcb7db0fa5890908d022dfaa10d3a64b531c88
 
 -Note: Would be easy to add Oakland data if I want, it has clean neighborhood attributes
