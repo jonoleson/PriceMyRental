@@ -1,8 +1,6 @@
 import pandas as pd
 from datetime import timedelta, date
 
-start_date = date(2014, 9, 28)
-end_date = date(2014, 10, 28)
 
 #Function to iterate through dates
 def daterange(start_date, end_date):
@@ -12,7 +10,7 @@ def daterange(start_date, end_date):
 
 def get_data(start_date, end_date):
   #Get dataframe of cities
-  cities = pd.read_csv('ongoing_cities.csv', header = False)
+  cities = pd.read_csv('data/ongoing_cities.csv', header = False)
 
   # Headers for our target dataframe
   cols = ['heading', 'body', 'price', 'lat', 'long', 'region', 'neighborhood', 
@@ -26,29 +24,31 @@ def get_data(start_date, end_date):
     #Append data to city_df
     for date in daterange(start_date, end_date):
       done_parsing = False
+      k=0
 
       while done_parsing == False:
-        url = 'https://s3-us-west-2.amazonaws.com/hoodsjson/%s/%s/%s/%s.html' %(state, city, date, i)
-        
+        url = 'https://s3-us-west-2.amazonaws.com/hoodsjson/%s/%s/%s/%s.html' %(state, city, date, k)
+        print url
         #Read json into pandas dataframe
         raw_df = pd.read_json(url)
 
-        #Filter df for only craigslist data
-        condition = raw_df['source'] == 'CRAIG'
-        raw_df = raw_df[condition]
-        raw_df = raw_df.reset_index()
-        del raw_df['index']
-
-        #Test if loaded df has any data
+        #Test if loaded df has any data (an empty JSON file always concludes the )
         if len(raw_df) > 0:
+          #Filter df for only craigslist data
+          condition = raw_df['source'] == 'CRAIG'
+          raw_df = raw_df[condition]
+          raw_df = raw_df.reset_index()
+          del raw_df['index']
+          #Parse raw_df into a usable format
           results_df = parse_info(raw_df, cols)
           city_df = city_df.append(results_df)
-          i=+1   
+          k += 1   
         else:
           done_parsing = True
 
-    #Write city_df to a csv 
-    city_df.to_csv('csvs/%s_%s.csv', 'wb+') %(city, state)
+    #Write city_df to a csv inside a 'data' folder. End result should be a csv file for each city
+    city_df.to_csv('data/csvs/%s_%s.csv' %(city, state), index=False, encoding='utf-8') 
+
 
 def parse_info(df, cols):
   results_df = pd.DataFrame(columns = cols, index = xrange(len(df)))
@@ -101,4 +101,12 @@ def parse_info(df, cols):
 
   return results_df
 
+def main():
+  start_date = date(2015, 5, 29)
+  end_date = date(2015, 5, 30)
+
+  get_data(start_date, end_date)
+
+if __name__=='__main__':
+  main()
 
