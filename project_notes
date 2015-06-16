@@ -30,4 +30,6 @@
     -Or just a neighborhood weight coefficient
     -Apply k-means clustering to lat/lon data?
     	-Geographical dividers (freeways/infrastructure, severe topography could complicate geographical clustering) 
+    	-Weighted linear clustering 
+    	-Zillow API may have neighborhood boundary data
 

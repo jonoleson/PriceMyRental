@@ -8,13 +8,16 @@ def daterange(start_date, end_date):
         single_date = start_date + timedelta(n)
         yield single_date.strftime('%Y-%m-%d')
 
-def get_data(start_date, end_date):
+def get_data(start_date, end_date, one_city=False):
   #Get dataframe of cities
   cities = pd.read_csv('data/ongoing_cities.csv', header = False)
 
   # Headers for our target dataframe
   cols = ['heading', 'body', 'price', 'lat', 'long', 'region', 'neighborhood', 
              'beds', 'baths', 'parking', 'washer_dryer']
+
+  if one_city=True:
+    cities = cities['city'] == 'San Francisco'
 
   for i in xrange(len(cities)):
     city = cities.city_code[i]
@@ -102,8 +105,8 @@ def parse_info(df, cols):
   return results_df
 
 def main():
-  start_date = date(2015, 5, 29)
-  end_date = date(2015, 5, 30)
+  start_date = date(2014, 9, 29)
+  end_date = date(2015, 6, 10)
 
   get_data(start_date, end_date)
 
