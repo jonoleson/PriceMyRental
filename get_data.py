@@ -9,7 +9,7 @@ def daterange(start_date, end_date):
         single_date = start_date + timedelta(n)
         yield single_date.strftime('%Y-%m-%d')
 
-def get_data(start_date, end_date, one_city=False):
+def get_data(start_date, end_date, one_city=False, print_urls=False):
   #Get dataframe of cities
   cities = pd.read_csv('data/ongoing_cities.csv', header = False)
 
@@ -40,7 +40,9 @@ def get_data(start_date, end_date, one_city=False):
 
       while done_parsing == False:
         url = 'https://s3-us-west-2.amazonaws.com/hoodsjson/%s/%s/%s/%s.html' %(state, city, date, k)
-        print url
+        #If print_urls==True, Print out the url of each json as it's being parsed
+        if print_urls==True:
+          print url
         #Read json into pandas dataframe
         #Some days may have no data and may throw an error when loaded, so using try/except to control for this
         try: 
@@ -126,7 +128,7 @@ def parse_info(df, cols):
 def main():
   start_date = date(2014, 9, 29)
   end_date = date(2015, 6, 17)
-  get_data(start_date, end_date, one_city=True)
+  get_data(start_date, end_date, one_city=True, print_urls=True)
 
 if __name__=='__main__':
   main()

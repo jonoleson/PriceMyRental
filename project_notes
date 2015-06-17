@@ -39,6 +39,8 @@
         -stainless
 
 -Subset data for a homogenous set (eg, 2 bedrooms in the castro), then analyze what textual features of the description are highly correlated with upticks or downticks in price
+
+-TFIDF vectorization on descriptions > NMF factorization > Random Forest regressor
         
 -How to get neighborhood price averages if I only have lat and lon?
     -Add features to each listing: Neighborhood averages for 1bd, 2bd, 3bd, etc...
@@ -46,11 +48,8 @@
     -Apply clustering to lat/lon data?
     	-Geographical dividers (freeways/infrastructure, severe topography could complicate geographical clustering) 
     	-Weighted linear clustering 
-<<<<<<< HEAD
     -Zillow API may have neighborhood boundary data
     -If starting with just San Francisco, nearly all data points have neighborhood attributes (craigslist sf is set up so that posters will almost always select a neighborhood)
-=======
     	-Zillow API may have neighborhood boundary data
->>>>>>> 70dcb7db0fa5890908d022dfaa10d3a64b531c88
 
 -Note: Would be easy to add Oakland data if I want, it has clean neighborhood attributes
