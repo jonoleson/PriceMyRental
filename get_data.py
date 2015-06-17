@@ -51,7 +51,8 @@ def get_data(start_date, end_date, one_city=False, print_urls=False):
           print 'No data this day'
           break
 
-        #Test if loaded df has any data (the last json file of a day that contains data is always valid but empty)
+        #Test if loaded df has any data (the last json file of a day, if that day contains data at all,
+        #is always valid but empty)
         if len(raw_df) > 0:
           #Filter df for only craigslist data
           condition = raw_df['source'] == 'CRAIG'
