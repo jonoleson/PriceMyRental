@@ -31,5 +31,12 @@ sfdf = sfdf['price'].dropna()
 #Somewhat arbitrarily filtering for only units priced at under 20k/month
 sfdf = sfdf[(sfdf['price'] < 20000)]
 
-#
+#Create df containing nighborhood average rents for 1-bedroom apartments
 sfdf_grouped = sfdf[(sfdf['beds']==1)].groupby('neighborhood').mean()
+
+#Set original df's index to the neighborhood field
+sf_deduped.set_index('neighborhood', inplace=True)
+
+#Join sfdf and sfdf_grouped to add the average 1_bedroom price for a given 
+#neighborhood to sfdf
+sf_deduped.join(df_grouped[['price']], rsuffix='_1bd_avg') 
