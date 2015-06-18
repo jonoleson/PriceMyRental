@@ -38,9 +38,10 @@
         -designer
         -stainless
 
+
 -Subset data for a homogenous set (eg, 2 bedrooms in the castro), then analyze what textual features of the description are highly correlated with upticks or downticks in price
 
--TFIDF vectorization on descriptions > NMF factorization > Random Forest regressor
+-TFIDF vectorization on descriptions > NMF factorization adds latent feature weights to each point > Regressor to find price:avg ratio > Multiplied by 
         
 -How to get neighborhood price averages if I only have lat and lon?
     -Add features to each listing: Neighborhood averages for 1bd, 2bd, 3bd, etc...
@@ -53,3 +54,8 @@
     	-Zillow API may have neighborhood boundary data
 
 -Note: Would be easy to add Oakland data if I want, it has clean neighborhood attributes
+
+-Can use average prices from internal craigslist data, or from external source?
+    -Which would be more accurate? Internal data may have some bias in what types of properties end up listed on craigslist.
+    -But if it's intended for people posting on craigslist, the craigslist bias may be a good thing 
+    -But if this is intended 
