@@ -20,8 +20,16 @@ sfdf = sfdf[condition]
 
 #Sort dataframe by date, then de-duplicate according to listing IDs and body text, 
 #keeping the most recent listing
-sfdf.sort('date')
-sfdf.drop_duplicates('id')
-sfdf.drop_duplicates('body')
+sfdf = sfdf.sort('date')
+sfdf = sfdf.drop_duplicates('id')
+sfdf = sfdf.drop_duplicates('body')
+
 #This should have reduced around 200k datapoints into roughly 81k 
 
+#Remove obvious outliers and listings with NaNs in price category
+sfdf = sfdf['price'].dropna()
+#Somewhat arbitrarily filtering for only units priced at under 20k/month
+sfdf = sfdf[(sfdf['price'] < 20000)]
+
+#
+sfdf_grouped = sfdf[(sfdf['beds']==1)].groupby('neighborhood').mean()

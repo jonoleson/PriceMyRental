@@ -1,5 +1,7 @@
-Benchmark:
+**Benchmark**
 Method:
 -Get mean 1 bedroom values in each neighborhood, add this as a feature
 -Use NMF on listing body text to get latent feature weights, add these as features
 -User Random Forest Regressor to predict price
+
+Results:

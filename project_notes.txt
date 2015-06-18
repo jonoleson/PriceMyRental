@@ -1,0 +1,63 @@
+-Look into using redshift for getting data
+
+-Don't worry about de-duping until model is built
+
+-amenity-adding: start with brute force, string-matching
+
+-80/20 train-test split
+
+-use a few different models to compare accuracy
+
+-perhaps group data with classification model (into pricing tiers?), do regressions within each group (classification + regression)
+    -Simplest: Classify each unit as either below market average or above market average relative to area and number of bedrooms
+    -Better: 3-star rating; 1-star, 2-star, and 3-star ratings for each listing, with a regression model fitted to each
+        -Use MN Naive Bayes to classify star rating?
+
+-create separate csv of new-found amenities from external sources or text analysis
+
+-Get neighborhood crime data, walkscore (maybe not necessary if i just have neighborhood price averages?)
+
+-Keep the data as raw as possible, can do other things to it, don't delete what i started with
+
+-Fraud detection, look into craigslist fraud guide
+
+-Can use zillow/trulia to get actual property value?
+
+-Get unit star-rating by detecting features in description through string-matching (or MN Naive Bayes?)
+    -Words to match: 
+        -hardwood
+        -marble
+        -remodel
+        -shuttle
+        -bart
+        -deck/balcony
+        -garden
+        -natural light/bright/sunlight
+        -luxury
+        -valet
+        -designer
+        -stainless
+
+
+-Subset data for a homogenous set (eg, 2 bedrooms in the castro), then analyze what textual features of the description are highly correlated with upticks or downticks in price
+
+-TFIDF vectorization on descriptions > NMF factorization adds latent feature weights to each point > Regressor to find price:avg ratio > Multiplied by 
+        
+-How to get neighborhood price averages if I only have lat and lon?
+    -Add features to each listing: Neighborhood averages for 1bd, 2bd, 3bd, etc...
+    -Or just a neighborhood weight coefficient
+    -Apply clustering to lat/lon data?
+    	-Geographical dividers (freeways/infrastructure, severe topography could complicate geographical clustering) 
+    	-Weighted linear clustering 
+    -Zillow API may have neighborhood boundary data
+    -If starting with just San Francisco, nearly all data points have neighborhood attributes (craigslist sf is set up so that posters will almost always select a neighborhood)
+    	-Zillow API may have neighborhood boundary data
+
+-Note: Would be easy to add Oakland data if I want, it has clean neighborhood attributes
+
+-Can use average prices from internal craigslist data, or from external source?
+    -Which would be more accurate? Internal data may have some bias in what types of properties end up listed on craigslist.
+    -But if it's intended for people posting on craigslist, the craigslist bias may be a good thing 
+    -But if this is intended 
+
+-
