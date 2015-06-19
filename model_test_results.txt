@@ -1,6 +1,18 @@
 **Benchmark**
 Method:
--Get mean 1 bedroom values in each neighborhood, add this as a feature
+-Get median 1 bedroom values in each neighborhood, add this as a feature
 -User Random Forest Regressor to predict price based on existing numerical features
 
 Results:
+R^2: 0.73049417583385168
+RMSE: 973.44139789529413
+
+**Benchmark + NMF**
+Method:
+-On top of benchmark method, add latent features weights derived from the description text 
+-Use Random Forest Regressor to predict price based on these existing numerical features as well as the latent feature weights
+
+Results:
+R^2: 0.80713926167495353
+RMSE: 805.00381493260682
+

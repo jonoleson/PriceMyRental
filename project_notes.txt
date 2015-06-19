@@ -2,11 +2,9 @@
 
 -Don't worry about de-duping until model is built
 
--amenity-adding: start with brute force, string-matching
+-amenity-adding: start with brute force, string-matching?
 
--80/20 train-test split
-
--use a few different models to compare accuracy
+-Models to compare: ridge, lasso, random forest regressor
 
 -perhaps group data with classification model (into pricing tiers?), do regressions within each group (classification + regression)
     -Simplest: Classify each unit as either below market average or above market average relative to area and number of bedrooms
@@ -14,10 +12,6 @@
         -Use MN Naive Bayes to classify star rating?
 
 -create separate csv of new-found amenities from external sources or text analysis
-
--Get neighborhood crime data, walkscore (maybe not necessary if i just have neighborhood price averages?)
-
--Keep the data as raw as possible, can do other things to it, don't delete what i started with
 
 -Fraud detection, look into craigslist fraud guide
 
@@ -48,7 +42,7 @@
     -Or just a neighborhood weight coefficient
     -Apply clustering to lat/lon data?
     	-Geographical dividers (freeways/infrastructure, severe topography could complicate geographical clustering) 
-    	-Weighted linear clustering 
+    	-Weighted linear clustering? 
     -Zillow API may have neighborhood boundary data
     -If starting with just San Francisco, nearly all data points have neighborhood attributes (craigslist sf is set up so that posters will almost always select a neighborhood)
     	-Zillow API may have neighborhood boundary data
@@ -60,4 +54,4 @@
     -But if it's intended for people posting on craigslist, the craigslist bias may be a good thing 
     -But if this is intended 
 
--
+-Alternative 

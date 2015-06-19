@@ -77,7 +77,9 @@ def parse_info(df, cols):
   results_df['body'] = df['body']
   results_df['price'] = df['price']
   results_df['date'] = pd.to_datetime(df['timestamp'], unit='s')
-
+  
+  #The conditionals here are to test if the field we're searching for is
+  #present in a given listing. Some listings are missing fields.
   for i in xrange(len(df)):
     if 'lat' and 'long' in df.iloc[i]['location']:
       results_df.ix[i,'lat'] = float(df.iloc[i]['location']['lat'])
