@@ -7,7 +7,7 @@ import re
 from sklearn.decomposition import NMF
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.cross_validation import train_test_split
-
+from geopy.distance import vincenty
 
 #class PriceMyRental()
 
@@ -73,3 +73,41 @@ def rf_with_nmf(df, n_topics):
     concat_df = pd.concat([df, latent_df], axis=1)
     print random_forest_regressor(concat_df)
 
+def median_neighbors(df, n_neighbors):
+    '''
+    This model forecasts price by searching for n_neighbors closest 
+    listings to each listing and returning the median price of those 
+    listings
+    '''
+    median_prices = []
+    for i in len(df): 
+        point_id = df.ix[i,'id']
+        a_lat = df.ix[i,'lat']
+        a_long = df.ix[i,'long']
+        n_bed = df.ix[i,'beds']
+        n_bath = df[i,'baths']
+        sub_df = df[(df['beds']==n_bed)&(df['baths']==n_baths)]
+        sub_df['dists'] = np.nan
+        idx = sub_df[sub_df['id'] == point_idx].index.tolist()[0]
+        for e in xrange(idx):
+            b_lat = sub_df.ix[e,'lat']
+            b_long = sub_df.ix[e,'long']
+            dist = vincenty((a_lat, a_long), (b_lat, b_long)).meters
+            sub_df.ix[e,'dists'] = dist
+        for e in xrange(idx+1, len(sub_df)):
+            b_lat = sub_df.ix[e,'lat']
+            b_long = sub_df.ix[e,'long']
+            dist = vincenty((a_lat, a_long), (b_lat, b_long)).meters
+            sub_df.ix[e,'dists'] = dist
+        sub_df = sub_df.sort('dists')
+        med_price = sub_df['price'][:n_neighbors].median()
+        median_prices.append(med_price)
+    df['med_neighbor_price'] = median_prices
+    rmse = np.mean((df['med_neighbor_price'] - df['price'])**2)**0.5
+    return 'RMSE is ', rmse
+
+def graph_trend(df):
+    df_copy = df.copy()
+    df_grouped_median = df_copy[(df_copy['beds']==1)].groupby('year-month').median()
+    plt.figure(figsize=(10,10))
+    df_grouped_median['price'].plot()

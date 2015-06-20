@@ -1,5 +1,4 @@
 import pandas as pd 
-import matplotlib.pyplot as plt 
 import datetime 
 
 def clean_data():
@@ -37,7 +36,8 @@ def clean_data():
     #Somewhat arbitrarily filtering for only units priced at under 20k/month
     #Properties listed at over 20k/month are either extreme luxury outliers or typos
     sfdf = sfdf[(sfdf['price'] < 20000)]
-
+    #Similarly filtering out units that are below 500 as being most likely erroneously priced
+    sfdf = sfdf[(sfdf['price'] > 500)]
     #Create df containing nighborhood median rents for 1-bedroom apartments
     sfdf_grouped = sfdf[(sfdf['beds']==1)].groupby('neighborhood').median()
 
@@ -58,8 +58,3 @@ def clean_data():
 
     return sfdf, test_df
 
-def graph_trend(sfdf):
-    df_copy = sfdf.copy()
-    df_grouped_median = df_copy[(df_copy['beds']==1)].groupby('year-month').median()
-    plt.figure(figsize=(10,10))
-    df_grouped_median['price'].plot()
