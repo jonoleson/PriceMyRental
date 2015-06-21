@@ -79,16 +79,18 @@ def median_neighbors(df, n_neighbors):
     listings to each listing and returning the median price of those 
     listings
     '''
+    print 'running...'
     median_prices = []
-    for i in len(df): 
-        point_id = df.ix[i,'id']
+    for i in xrange(len(df)): 
+        point_id = int(df.ix[i,'id'])
         a_lat = df.ix[i,'lat']
         a_long = df.ix[i,'long']
-        n_bed = df.ix[i,'beds']
-        n_bath = df[i,'baths']
-        sub_df = df[(df['beds']==n_bed)&(df['baths']==n_baths)]
+        n_beds = int(df.ix[i,'beds'])
+        n_baths = int(df.ix[i,'baths'])
+        sub_df = df[(df['beds']==n_beds)&(df['baths']==n_baths)]
+        sub_df = sub_df.reset_index()
         sub_df['dists'] = np.nan
-        idx = sub_df[sub_df['id'] == point_idx].index.tolist()[0]
+        idx = sub_df[sub_df['id'] == point_id].index.tolist()[0]
         for e in xrange(idx):
             b_lat = sub_df.ix[e,'lat']
             b_long = sub_df.ix[e,'long']
@@ -102,6 +104,9 @@ def median_neighbors(df, n_neighbors):
         sub_df = sub_df.sort('dists')
         med_price = sub_df['price'][:n_neighbors].median()
         median_prices.append(med_price)
+        if i % 7500 == 0:
+            n = i/7500
+            print '%s0%' %n
     df['med_neighbor_price'] = median_prices
     rmse = np.mean((df['med_neighbor_price'] - df['price'])**2)**0.5
     return 'RMSE is ', rmse

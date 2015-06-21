@@ -17,7 +17,7 @@ def clean_data():
     nhoods.remove('all neighborhoods')
 
     #Filter for only the neighborhoods that craigslist explicitly codifies for in SF
-    condition = (sfdf['neighborhood'].isin(nhoods)
+    condition = sfdf['neighborhood'].isin(nhoods)
     sfdf = sfdf[condition]
 
     #Sort dataframe by date, then de-duplicate according to listing IDs and body text, 
@@ -25,19 +25,21 @@ def clean_data():
     sfdf = sfdf.sort('date')
     sfdf = sfdf.drop_duplicates('id')
     sfdf = sfdf.drop_duplicates('body')
+
+    #Reset the index, and delete the old index column created by this operation
+    sfdf = sfdf.reset_index()
+    del sfdf['index']
+
     #Drop listings which still contain NA values, which now should only occur in 
     #the 'beds' and 'baths' columns. These listings tend to be unreliable and misleading. 
     sfdf = sfdf.dropna(axis=0)
 
     #This should have reduced around 200k datapoints into roughly 75k 
 
-    #Remove obvious outliers and listings with NaNs in price category
-    sfdf = sfdf['price'].dropna()
-    #Somewhat arbitrarily filtering for only units priced at under 20k/month
-    #Properties listed at over 20k/month are either extreme luxury outliers or typos
+    #Remove outliers filtering for only units priced between 500 and 20k/month
     sfdf = sfdf[(sfdf['price'] < 20000)]
-    #Similarly filtering out units that are below 500 as being most likely erroneously priced
     sfdf = sfdf[(sfdf['price'] > 500)]
+    
     #Create df containing nighborhood median rents for 1-bedroom apartments
     sfdf_grouped = sfdf[(sfdf['beds']==1)].groupby('neighborhood').median()
 
