@@ -104,9 +104,9 @@ def median_neighbors(df, n_neighbors):
         sub_df = sub_df.sort('dists')
         med_price = sub_df['price'][:n_neighbors].median()
         median_prices.append(med_price)
-        if i % 7500 == 0:
-            n = i/7500
-            print '%s0%' %n
+        if i % 750 == 0:
+            n = i/750
+            print '%s%' %n
     df['med_neighbor_price'] = median_prices
     rmse = np.mean((df['med_neighbor_price'] - df['price'])**2)**0.5
     return 'RMSE is ', rmse
