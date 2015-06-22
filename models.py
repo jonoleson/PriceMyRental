@@ -73,46 +73,53 @@ def rf_with_nmf(df, n_topics):
     concat_df = pd.concat([df, latent_df], axis=1)
     print random_forest_regressor(concat_df)
 
-def median_neighbors(df, n_neighbors):
+def median_neighbors(df, n_listings, n_neighbors):
     '''
     This model forecasts price by searching for n_neighbors closest 
     listings to each listing and returning the median price of those 
     listings
     '''
     print 'running...'
-    median_prices = []
-    for i in xrange(len(df)): 
-        point_id = int(df.ix[i,'id'])
-        a_lat = df.ix[i,'lat']
-        a_long = df.ix[i,'long']
-        n_beds = int(df.ix[i,'beds'])
-        n_baths = int(df.ix[i,'baths'])
-        sub_df = df[(df['beds']==n_beds)&(df['baths']==n_baths)]
-        sub_df = sub_df.reset_index()
+    dfcopy = df.copy()
+    dfcopy['med_neighbor_price'] = np.nan
+    for i in xrange(n_listings):
+        point_id = int(dfcopy.ix[i,'id'])
+        a_lat    = dfcopy.ix[i,'lat']
+        a_long   = dfcopy.ix[i,'long']
+        n_beds   = int(dfcopy.ix[i,'beds'])
+        n_baths  = int(dfcopy.ix[i,'baths'])
+        
+        # Create subset of dataframe w/same beds & baths,
+        # omitting the current listing
+        sub_df = dfcopy[
+            (dfcopy['beds']  == n_beds)  &
+            (dfcopy['baths'] == n_baths) &
+            (dfcopy['id']    != point_id)
+        ]
+        sub_df.reset_index(inplace=True)
         sub_df['dists'] = np.nan
-        idx = sub_df[sub_df['id'] == point_id].index.tolist()[0]
-        for e in xrange(idx):
-            b_lat = sub_df.ix[e,'lat']
-            b_long = sub_df.ix[e,'long']
-            dist = vincenty((a_lat, a_long), (b_lat, b_long)).meters
-            sub_df.ix[e,'dists'] = dist
-        for e in xrange(idx+1, len(sub_df)):
-            b_lat = sub_df.ix[e,'lat']
-            b_long = sub_df.ix[e,'long']
-            dist = vincenty((a_lat, a_long), (b_lat, b_long)).meters
-            sub_df.ix[e,'dists'] = dist
+        
+        # calc distance b/w each row in the sub-DF
+        # and the current listing
+        for e in xrange(len(sub_df)):
+            b_lat  = sub_df.ix[e, 'lat']
+            b_long = sub_df.ix[e, 'long']
+            dist   = vincenty((a_lat, a_long), (b_lat, b_long)).meters
+            sub_df.ix[e, 'dists'] = dist
+        
         sub_df = sub_df.sort('dists')
         med_price = sub_df['price'][:n_neighbors].median()
-        median_prices.append(med_price)
+        dfcopy.ix[i,'med_neighbor_price'] = med_price
         if i % 750 == 0:
             n = i/750
-            print '%s%' %n
-    df['med_neighbor_price'] = median_prices
-    rmse = np.mean((df['med_neighbor_price'] - df['price'])**2)**0.5
-    return 'RMSE is ', rmse
+            print '%s percent' %n
+    
+    return dfcopy    
+    # rmse = np.mean((df['med_neighbor_price'] - df['price'])**2)**0.5
+    # return 'RMSE is ', rmse
 
 def graph_trend(df):
-    df_copy = df.copy()
-    df_grouped_median = df_copy[(df_copy['beds']==1)].groupby('year-month').median()
+    dfcopy = df.copy()
+    df_grouped_median = dfcopy[(dfcopy['beds']==1)].groupby('year-month').median()
     plt.figure(figsize=(10,10))
     df_grouped_median['price'].plot()

@@ -1,3 +1,12 @@
+6/21:
+-Don't forget; geopy.geocoders.Nomanatim
+-Working on implementing postgis for median neighbor price model
+-Need to create main.py for running model off user input
+
+6/20:
+-median_neighbors started executing at 8:04pm, finished at: n/a
+-median_neighbors will not work as written; need to rewrite, use postgres, figure out additional filtering options
+
 6/19:
 -geopandas not installing correctly
 -'%autoreload 0' to disable autoreload, '%autoreload 2' to reenable
