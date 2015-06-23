@@ -55,8 +55,5 @@ def clean_data():
     yrmonths = [x[:7] for x in sfdf['date']]
     sfdf['year-month'] = yrmonths
 
-    #Subset dataframe into only features that will be used in testing
-    #test_df = sfdf[['beds', 'baths', 'parking', 'washer_dryer', 'price_1bd_med', 'price']]
-
-    return sfdf #, test_df
+    return sfdf 
 

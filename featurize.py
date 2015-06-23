@@ -1,3 +1,4 @@
+import pandas as pd
 import numpy as np 
 from nltk.corpus import stopwords
 from sklearn.feature_extraction.text import TfidfVectorizer
@@ -8,34 +9,8 @@ from sklearn.decomposition import NMF
 from sklearn.neighbors import KDTree 
 import cPickle
 
+
 def median_neighbors(df, n_neighbors):
-    '''
-    This model forecasts price by searching for n_neighbors closest 
-    listings to each listing and returning the median price of those 
-    listings. It does this by using a KD-Tree to efficiently find the
-    listings closest to the current listing in location (lat, long)
-    and size (beds, baths). It returns an RMSE to test its baseline 
-    performance as a standalone model and returns a modified DataFrame
-    that can be passed in to another model.
-    '''
-    kd_df = df[['baths', 'beds', 'lat', 'long']]
-    kdvals = kd_df.values
-    kd = KDTree(kdvals, leaf_size = 30000)
-    cPickle.dump(kd, open('models/kd_tree.pkl', 'wb'))
-    neighbors = kd.query(kdvals, k=n_neighbors)
-
-    median_neighbor_prices = []
-    for i in xrange(len(df)):
-        med_price = df.price[neighbors[1][i][:n_neighbors]].median()
-        median_neighbor_prices.append(med_price)
-
-    df['med_neighbor_price'] = median_neighbor_prices
-       
-    rmse = np.mean((df['med_neighbor_price'] - df['price'])**2)**0.5
-    print 'RMSE is ', rmse
-    return df
-
-def alt_median_neighbors(df, n_neighbors):
     '''
     This model forecasts price by searching for n_neighbors closest 
     listings to each listing and returning the median price of those 
@@ -51,7 +26,7 @@ def alt_median_neighbors(df, n_neighbors):
     kdvals = kd_df.values
     kd = KDTree(kdvals, leaf_size = 1000)
     cPickle.dump(kd, open('models/kd_tree.pkl', 'wb'))
-    neighbors = kd.query(kdvals, k=n_neighbors)
+    neighbors = kd.query(kdvals, k=150)
 
     median_neighbor_prices = []
     for i in xrange(len(df)):
@@ -109,7 +84,7 @@ def run_nmf(X, vectorizer, n_topics=4, print_top_words=False):
 
     if print_top_words==True:
         feature_names = vectorizer.get_feature_names()
-        n_top_words = 10    
+        n_top_words   = 10    
         for topic_idx, topic in enumerate(nmf.components_):
             print("Topic #%d:" % topic_idx)
             print(" ".join([feature_names[i]
@@ -119,10 +94,11 @@ def run_nmf(X, vectorizer, n_topics=4, print_top_words=False):
     return H #Return the H matrix
 
 def add_latent_features(df, n_topics):
-    clean_text = clean(df.body.values)
-    vectorizer, X = get_tfidf(clean_text)
+    clean_text     = clean(df.body.values)
+    vectorizer, X  = get_tfidf(clean_text)
     latent_weights = run_nmf(X, vectorizer, n_topics=n_topics)
-    latent_df = pd.DataFrame(latent_weights, columns=(['Latent Feature %s' % (i+1) for i in range(len(n_topics))]))
+    latent_df      = pd.DataFrame(latent_weights, columns=(
+                                ['Latent Feature %s' % (i+1) for i in range(n_topics)]))
     df = df.reset_index()
     del df['neighborhood']
     concat_df = pd.concat([df, latent_df], axis=1)
@@ -130,5 +106,15 @@ def add_latent_features(df, n_topics):
 
 
 def featurize_df(df, n_topics, n_neighbors):
-    df = median_neighbors(df, n_neighbors=21)
-    pass
+    df = median_neighbors(df, n_neighbors=10)
+    df = add_latent_features(df, n_topics=4)
+
+    #Subset dataframe into only features that will be used in testing
+    testing_df = sfdf[['beds', 'baths', 'parking', 'washer_dryer', 
+                    'price_1bd_med', 'Latent Feature 1', 'Latent Feature 2'
+                    'Latent Feature 3', 'Latent Feature 4', 
+                    'med_neighbor_price', 'price']]
+    testing_df = testing_df.dropna(axis=0)
+    return testing_df
+
+
