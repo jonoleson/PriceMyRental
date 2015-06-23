@@ -4,8 +4,8 @@ Method:
 -User Random Forest Regressor to predict price based on existing numerical features
 
 Results:
-R^2: 0.73049417583385168
-RMSE: 973.44139789529413
+R^2: 0.730
+RMSE: 973.441
 
 **Benchmark + NMF**
 Method:
@@ -13,6 +13,12 @@ Method:
 -Use Random Forest Regressor to predict price based on these existing numerical features as well as the latent feature weights
 
 Results:
-R^2: 0.80713926167495353
-RMSE: 805.00381493260682
+R^2: 0.807
+RMSE: 805.004
 
+**Nearest Neighbors**
+Method: 
+-Used a KD-Tree to find the nearest 20 neighbors to the each listing, then take the median of those listings
+
+Results:
+RMSE: 934.988 with k=20, 883.820 with k=10, 

@@ -43,8 +43,8 @@ def get_data(start_date, end_date, one_city=False, print_urls=False):
         #If print_urls==True, Print out the url of each json as it's being parsed
         if print_urls==True:
           print url
-        #Read json into pandas dataframe
-        #Some days may have no data and may throw an error when loaded, so using try/except to control for this
+        #Read json into pandas dataframe. Some days may have no data and 
+        #may throw an error when loaded, so using try/except to control for this.
         try: 
           raw_df = pd.read_json(url)
         except urllib2.HTTPError:
