@@ -1,0 +1,82 @@
+<html>
+<head>
+    <title>Price My Rental</title>
+</head>
+<body>
+    <form action="/receive" method="post">
+        <br>
+        # Bedrooms:<br>
+        <input type="text" name="# Bedrooms">
+        <br>
+        # Bathrooms:<br>
+        <input type="text" name="# Bathrooms">
+        <br>
+        Address:<br>
+        <input type="text" name="Address">
+        <br>
+        Neighborhood:<br>
+        <select>
+            <option>sunset / parkside</option>
+            <option>inner richmond</option>
+            <option>financial district</option>
+            <option>portola district</option>
+            <option>inner sunset / UCSF</option>
+            <option>noe valley</option>
+            <option>tenderloin</option>
+            <option>haight ashbury</option>
+            <option>SOMA / south beach</option>
+            <option>alamo square / nopa</option>
+            <option>hayes valley</option>
+            <option>north beach / telegraph hill</option>
+            <option>lower nob hill</option>
+            <option>russian hill</option>
+            <option>mission district</option>
+            <option>cole valley / ashbury hts</option>
+            <option>richmond / seacliff</option>
+            <option>laurel hts / presidio</option>
+            <option>twin peaks / diamond hts</option>
+            <option>nob hill</option>
+            <option>lower haight</option>
+            <option>USF / panhandle</option>
+            <option>glen park</option>
+            <option>marina / cow hollow</option>
+            <option>lower pac hts</option>
+            <option>castro / upper market</option>
+            <option>downtown / civic / van ness</option>
+            <option>western addition</option>
+            <option>excelsior / outer mission</option>
+            <option>bernal heights</option>
+            <option>west portal / forest hill</option>
+            <option>potrero hill</option>
+            <option>pacific heights</option>
+            <option>ingleside / SFSU / CCSF</option>
+            <option>visitacion valley</option>
+            <option>bayview</option>
+        </select>
+        <br>
+        Parking:<br>
+        <select>
+            <option value="0">No reliable parking</option>
+            <option value="1">Reliable street parking</option>
+            <option value="3">Off-street Parking (e.g, shared garage)</option>
+            <option value="2">Carport</option>
+            <option value="4">Attached private garage</option>
+        </select>
+        <br>
+        Washer-dryer in unit:<br>
+        <select>
+            <option value="1">Yes</option>
+            <option value="0">No</option>
+        </select>
+        <br>
+        Current/Intended listed price (for comparison):<br>
+        <input type="text" name="intended price">
+        <br>
+        Description of unit (e.g, craigslist description):<br>
+        <input type="text">
+        <input type="submit" value="Submit">
+        <br>
+    </form>
+</body>
+</html>
+

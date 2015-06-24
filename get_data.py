@@ -21,8 +21,6 @@ def get_data(start_date, end_date, one_city=False, print_urls=False):
   if one_city==True:
     cities = cities[(cities['city'] == 'San Francisco')]
 
-  if one_city==True:
-    cities = cities['city'] == 'San Francisco'
 
   for i in xrange(len(cities)):
     if one_city==False:
@@ -81,12 +79,12 @@ def parse_info(df, cols):
   #The conditionals here are to test if the field we're searching for is
   #present in a given listing. Some listings are missing fields.
   for i in xrange(len(df)):
-    if 'lat' and 'long' in df.iloc[i]['location']:
+    if 'lat' and 'lon' in df.iloc[i]['location']:
       results_df.ix[i,'lat'] = float(df.iloc[i]['location']['lat'])
-      results_df.ix[i,'long'] = float(df.iloc[i]['location']['long'])
+      results_df.ix[i,'lon'] = float(df.iloc[i]['location']['lon'])
     else:
       results_df.ix[i,'lat'] = None
-      results_df.ix[i,'long'] = None 
+      results_df.ix[i,'lon'] = None 
 
     if 'source_subloc' in df.iloc[i]['annotations']:
       results_df.ix[i, 'region'] = df.iloc[i]['annotations']['source_subloc']

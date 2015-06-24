@@ -9,11 +9,12 @@ def random_forest_regressor(df):
     y = df.pop('price').values
     X = df.values
     feature_names = df.columns
-    xtrain, xtest, ytrain, ytest = train_test_split(X, y, test_size=0.3) 
+    xtrain, xtest, ytrain, ytest = train_test_split(X, y, test_size=0.3, random_state=5) 
 
     clf = RandomForestRegressor()
+
     clf.fit(xtrain, ytrain)
-    #cPickle.dump(clf, open('models/rfr_model.pkl', 'wb'))
+    cPickle.dump(clf, open('models/rfr.pkl', 'wb'))
     score = clf.score(xtest, ytest)
     feat_imps = clf.feature_importances_
     rmse = np.mean((ytest - clf.predict(xtest))**2)**0.5
@@ -24,7 +25,7 @@ def ridge_regressor(df):
     y = df.pop('price').values
     X = df.values
     feature_names = df.columns
-    xtrain, xtest, ytrain, ytest = train_test_split(X, y, test_size=0.3)
+    xtrain, xtest, ytrain, ytest = train_test_split(X, y, test_size=0.3, random_state=0)
 
     clf = Ridge(alpha=1.0)
     clf.fit(xtrain, ytrain)
@@ -39,3 +40,4 @@ def graph_trend(df):
     df_grouped_median = dfcopy[(dfcopy['beds']==1)].groupby('year-month').median()
     plt.figure(figsize=(10,10))
     df_grouped_median['price'].plot()
+

@@ -39,16 +39,6 @@ def clean_data():
     #Remove outliers filtering for only units priced between 500 and 20k/month
     sfdf = sfdf[(sfdf['price'] < 20000)]
     sfdf = sfdf[(sfdf['price'] > 500)]
-    
-    #Create df containing nighborhood median rents for 1-bedroom apartments
-    sfdf_grouped = sfdf[(sfdf['beds']==1)].groupby('neighborhood').median()
-
-    #Set original df's index to the neighborhood field
-    sfdf.set_index('neighborhood', inplace=True)
-
-    #Join sfdf and sfdf_grouped to add the average 1_bedroom price for a given 
-    #neighborhood to sfdf
-    sfdf = sfdf.join(sfdf_grouped[['price']], rsuffix='_1bd_med') 
 
     #Add a month column containing the month and year from our 9-month interval
     #so we can graph price change over time
@@ -56,4 +46,5 @@ def clean_data():
     sfdf['year-month'] = yrmonths
 
     return sfdf 
+
 
