@@ -6,56 +6,56 @@
     <form action="/receive" method="post">
         <br>
         # Bedrooms:<br>
-        <input type="text" name="# Bedrooms">
+        <input type="text" name="beds">
         <br>
         # Bathrooms:<br>
-        <input type="text" name="# Bathrooms">
+        <input type="text" name="baths">
         <br>
         Address:<br>
-        <input type="text" name="Address">
+        <input type="text" name="address">
         <br>
         Neighborhood:<br>
-        <select>
-            <option>sunset / parkside</option>
-            <option>inner richmond</option>
-            <option>financial district</option>
-            <option>portola district</option>
-            <option>inner sunset / UCSF</option>
-            <option>noe valley</option>
-            <option>tenderloin</option>
-            <option>haight ashbury</option>
-            <option>SOMA / south beach</option>
-            <option>alamo square / nopa</option>
-            <option>hayes valley</option>
-            <option>north beach / telegraph hill</option>
-            <option>lower nob hill</option>
-            <option>russian hill</option>
-            <option>mission district</option>
-            <option>cole valley / ashbury hts</option>
-            <option>richmond / seacliff</option>
-            <option>laurel hts / presidio</option>
-            <option>twin peaks / diamond hts</option>
-            <option>nob hill</option>
-            <option>lower haight</option>
-            <option>USF / panhandle</option>
-            <option>glen park</option>
-            <option>marina / cow hollow</option>
-            <option>lower pac hts</option>
-            <option>castro / upper market</option>
-            <option>downtown / civic / van ness</option>
-            <option>western addition</option>
-            <option>excelsior / outer mission</option>
-            <option>bernal heights</option>
-            <option>west portal / forest hill</option>
-            <option>potrero hill</option>
-            <option>pacific heights</option>
-            <option>ingleside / SFSU / CCSF</option>
-            <option>visitacion valley</option>
-            <option>bayview</option>
+        <select name="neigh">
+            <option value="sunset / parkside">sunset / parkside</option>
+            <option value="inner richmond">inner richmond</option>
+            <option value="financial district">financial district</option>
+            <option value="portola district">portola district</option>
+            <option value="inner sunset / UCSF">inner sunset / UCSF</option>
+            <option value="noe valley">noe valley</option>
+            <option value="tenderloin">tenderloin</option>
+            <option value="haight ashbury">haight ashbury</option>
+            <option value="SOMA / south beach">SOMA / south beach</option>
+            <option value="alamo square / nopa">alamo square / nopa</option>
+            <option value="hayes valley">hayes valley</option>
+            <option value="north beach / telegraph hill">north beach / telegraph hill</option>
+            <option value="lower nob hill">lower nob hill</option>
+            <option value="russian hill">russian hill</option>
+            <option value="mission district">mission district</option>
+            <option value="cole valley / ashbury hts">cole valley / ashbury hts</option>
+            <option value="richmond / seacliff">richmond / seacliff</option>
+            <option value="laurel hts / presidio">laurel hts / presidio</option>
+            <option value="twin peaks / diamond hts">twin peaks / diamond hts</option>
+            <option value="nob hill">nob hill</option>
+            <option value="lower haight">lower haight</option>
+            <option value="USF / panhandle">USF / panhandle</option>
+            <option value="glen park">glen park</option>
+            <option value="marina / cow hollow">marina / cow hollow</option>
+            <option value="lower pac hts">lower pac hts</option>
+            <option value="castro / upper market">castro / upper market</option>
+            <option value="downtown / civic / van ness">downtown / civic / van ness</option>
+            <option value="western addition">western addition</option>
+            <option value="excelsior / outer mission">excelsior / outer mission</option>
+            <option value="bernal heights">bernal heights</option>
+            <option value="west portal / forest hill">west portal / forest hill</option>
+            <option value="potrero hill">potrero hill</option>
+            <option value="pacific heights">pacific heights</option>
+            <option value="ingleside / SFSU / CCSF">ingleside / SFSU / CCSF</option>
+            <option value="visitacion valley">visitacion valley</option>
+            <option value="bayview">bayview</option>
         </select>
         <br>
         Parking:<br>
-        <select>
+        <select name="parking">
             <option value="0">No reliable parking</option>
             <option value="1">Reliable street parking</option>
             <option value="3">Off-street Parking (e.g, shared garage)</option>
@@ -64,16 +64,16 @@
         </select>
         <br>
         Washer-dryer in unit:<br>
-        <select>
+        <select name="washer_dryer">
             <option value="1">Yes</option>
             <option value="0">No</option>
         </select>
         <br>
         Current/Intended listed price (for comparison):<br>
-        <input type="text" name="intended price">
+        <input type="text" name="price">
         <br>
         Description of unit (e.g, craigslist description):<br>
-        <input type="text">
+        <input type="text" name="description">
         <input type="submit" value="Submit">
         <br>
     </form>

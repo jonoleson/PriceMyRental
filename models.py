@@ -29,7 +29,7 @@ def ridge_regressor(df):
 
     clf = Ridge(alpha=1.0)
     clf.fit(xtrain, ytrain)
-    #cPickle.dump(clf, open('models/ridge_model.pkl', 'wb'))
+    cPickle.dump(clf, open('models/ridge_model.pkl', 'wb'))
     score = clf.score(xtest, ytest)
     feat_imps = clf.coef_
     rmse = np.mean((ytest - clf.predict(xtest))**2)**0.5

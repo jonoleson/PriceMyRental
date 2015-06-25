@@ -22,7 +22,7 @@ Method:
 -Ran the KD-Tree based on lat, long, beds, and baths, which risks throwing out some relevant listings when splitting on the medians of the bed and bath fields
 
 Results:
-RMSE: 934.988 with k=20, 883.820 with k=10, 858.585 with k=10
+RMSE: 934.988 with k=20, 883.820 with k=10, 858.585 with k=5
 
 **Nearest Neighbors 2.0**
 -Ran the KD-Tree based on only lat and long, then manually extracted the closest listings that had the same layout (# of beds and baths) 
@@ -30,8 +30,7 @@ RMSE: 934.988 with k=20, 883.820 with k=10, 858.585 with k=10
 
 Results:
 RMSE: 834.207 with k=5, 831.634 with k=10
--Also, got RMSE=719.928 with k=5 when I accidentally wasn't filtering for listings with the same layout. Need to figure out why. 
--Update: This was because most listings in this case populated NaNs for their median_neighbors price, those that remained had neighbor medians very close to their own price.
+
 
 **Nearest Neighbors + NMF + RF Regressor**
 -Used NMF and the KD-Tree to featurize the df with latent features and the median neighbor price for all the listings

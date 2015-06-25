@@ -115,7 +115,6 @@ def run_pmr(beds, baths, address, neighborhood, parking,
     pmr.get_coords()
     pmr.build_df()
     pmr.featurize_listing(kd, search_df, nhood_medians, vectorizer, nmf)
-
     predict_statement, compare_statement = pmr.predict()
 
     return predict_statement, compare_statement
