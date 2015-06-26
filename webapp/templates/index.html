@@ -1,82 +1,225 @@
-<html>
-<head>
-    <title>Price My Rental</title>
-</head>
-<body>
-    <form action="/receive" method="post">
-        <br>
-        # Bedrooms:<br>
-        <input type="text" name="beds">
-        <br>
-        # Bathrooms:<br>
-        <input type="text" name="baths">
-        <br>
-        Address:<br>
-        <input type="text" name="address">
-        <br>
-        Neighborhood:<br>
-        <select name="neigh">
-            <option value="sunset / parkside">sunset / parkside</option>
-            <option value="inner richmond">inner richmond</option>
-            <option value="financial district">financial district</option>
-            <option value="portola district">portola district</option>
-            <option value="inner sunset / UCSF">inner sunset / UCSF</option>
-            <option value="noe valley">noe valley</option>
-            <option value="tenderloin">tenderloin</option>
-            <option value="haight ashbury">haight ashbury</option>
-            <option value="SOMA / south beach">SOMA / south beach</option>
-            <option value="alamo square / nopa">alamo square / nopa</option>
-            <option value="hayes valley">hayes valley</option>
-            <option value="north beach / telegraph hill">north beach / telegraph hill</option>
-            <option value="lower nob hill">lower nob hill</option>
-            <option value="russian hill">russian hill</option>
-            <option value="mission district">mission district</option>
-            <option value="cole valley / ashbury hts">cole valley / ashbury hts</option>
-            <option value="richmond / seacliff">richmond / seacliff</option>
-            <option value="laurel hts / presidio">laurel hts / presidio</option>
-            <option value="twin peaks / diamond hts">twin peaks / diamond hts</option>
-            <option value="nob hill">nob hill</option>
-            <option value="lower haight">lower haight</option>
-            <option value="USF / panhandle">USF / panhandle</option>
-            <option value="glen park">glen park</option>
-            <option value="marina / cow hollow">marina / cow hollow</option>
-            <option value="lower pac hts">lower pac hts</option>
-            <option value="castro / upper market">castro / upper market</option>
-            <option value="downtown / civic / van ness">downtown / civic / van ness</option>
-            <option value="western addition">western addition</option>
-            <option value="excelsior / outer mission">excelsior / outer mission</option>
-            <option value="bernal heights">bernal heights</option>
-            <option value="west portal / forest hill">west portal / forest hill</option>
-            <option value="potrero hill">potrero hill</option>
-            <option value="pacific heights">pacific heights</option>
-            <option value="ingleside / SFSU / CCSF">ingleside / SFSU / CCSF</option>
-            <option value="visitacion valley">visitacion valley</option>
-            <option value="bayview">bayview</option>
-        </select>
-        <br>
-        Parking:<br>
-        <select name="parking">
-            <option value="0">No reliable parking</option>
-            <option value="1">Reliable street parking</option>
-            <option value="3">Off-street Parking (e.g, shared garage)</option>
-            <option value="2">Carport</option>
-            <option value="4">Attached private garage</option>
-        </select>
-        <br>
-        Washer-dryer in unit:<br>
-        <select name="washer_dryer">
-            <option value="1">Yes</option>
-            <option value="0">No</option>
-        </select>
-        <br>
-        Current/Intended listed price (for comparison):<br>
-        <input type="text" name="price">
-        <br>
-        Description of unit (e.g, craigslist description):<br>
-        <input type="text" name="description">
-        <input type="submit" value="Submit">
-        <br>
-    </form>
-</body>
-</html>
+<!DOCTYPE html>
+<html lang="en">
 
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>PriceMyRental.io</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="static/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="static/css/stylish-portfolio.css" rel="stylesheet">
+
+    <!-- Custom Fonts -->
+    <link href="static/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,300italic,400italic,700italic" rel="stylesheet" type="text/css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+<body>
+
+    <!-- Header -->
+    <header id="top" class="header">
+        <div class="text-vertical-center">
+            <h1>Price My Rental</h1>
+            <h3>Apartment Price Recommendation Engine</h3>
+            <br>
+            <a href="#start" class="btn btn-dark btn-lg">Get Started</a>
+        </div>
+    </header>
+
+    <!-- Start -->
+    <section id="start" class="start">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 text-center">
+                    <h2>Price My Rental recommends accurate prices for San Francisco rental listings</h2>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Input -->
+    <section id="input" class="container content-section text-center">
+       <div class="row">
+           <div class="col-lg-8 col-lg-offset-2">
+               <p>Fill out the form to get a recommendation:</p>
+           </div>
+           <form role="form" action="/receive" method='POST'>
+               <div class="form-group">
+                    <br>
+                    <br>
+                    # Bedrooms:<br>
+                    <select name="beds">
+                        <option value=0>Studio</option>
+                        <option value=1>1</option>
+                        <option value=2>2</option>
+                        <option value=3>3</option>
+                        <option value=4>4</option>
+                        <option value=5>5</option>
+                        <option value=6>6+</option>
+                    </select>
+                    <br>
+                    # Bathrooms:<br>
+                    <select name="baths">
+                        <option value=1>1</option>
+                        <option value=2>2</option>
+                        <option value=3>3</option>
+                        <option value=4>4</option>
+                        <option value=5>5</option>
+                        <option value=6>6+</option>
+                    </select>
+                    <br>
+                    Address (SF only):<br>
+                    <input type="text" name="address" placeholder="Street Address">
+                    <br>
+                    Zip:<br>
+                    <input type="text" name="zip" placeholder="Zip Code">
+                    <br>
+                    Neighborhood:<br>
+                    <select name="neigh">
+                        <option value="sunset / parkside">sunset / parkside</option>
+                        <option value="inner richmond">inner richmond</option>
+                        <option value="financial district">financial district</option>
+                        <option value="portola district">portola district</option>
+                        <option value="inner sunset / UCSF">inner sunset / UCSF</option>
+                        <option value="noe valley">noe valley</option>
+                        <option value="tenderloin">tenderloin</option>
+                        <option value="haight ashbury">haight ashbury</option>
+                        <option value="SOMA / south beach">SOMA / south beach</option>
+                        <option value="alamo square / nopa">alamo square / nopa</option>
+                        <option value="hayes valley">hayes valley</option>
+                        <option value="north beach / telegraph hill">north beach / telegraph hill</option>
+                        <option value="lower nob hill">lower nob hill</option>
+                        <option value="russian hill">russian hill</option>
+                        <option value="mission district">mission district</option>
+                        <option value="cole valley / ashbury hts">cole valley / ashbury hts</option>
+                        <option value="richmond / seacliff">richmond / seacliff</option>
+                        <option value="laurel hts / presidio">laurel hts / presidio</option>
+                        <option value="twin peaks / diamond hts">twin peaks / diamond hts</option>
+                        <option value="nob hill">nob hill</option>
+                        <option value="lower haight">lower haight</option>
+                        <option value="USF / panhandle">USF / panhandle</option>
+                        <option value="glen park">glen park</option>
+                        <option value="marina / cow hollow">marina / cow hollow</option>
+                        <option value="lower pac hts">lower pac hts</option>
+                        <option value="castro / upper market">castro / upper market</option>
+                        <option value="downtown / civic / van ness">downtown / civic / van ness</option>
+                        <option value="western addition">western addition</option>
+                        <option value="excelsior / outer mission">excelsior / outer mission</option>
+                        <option value="bernal heights">bernal heights</option>
+                        <option value="west portal / forest hill">west portal / forest hill</option>
+                        <option value="potrero hill">potrero hill</option>
+                        <option value="pacific heights">pacific heights</option>
+                        <option value="ingleside / SFSU / CCSF">ingleside / SFSU / CCSF</option>
+                        <option value="visitacion valley">visitacion valley</option>
+                        <option value="bayview">bayview</option>
+                    </select>
+                    <br>
+                    Parking:<br>
+                    <select name="parking">
+                        <option value="0">No reliable parking</option>
+                        <option value="1">Reliable street parking</option>
+                        <option value="3">Off-street Parking (e.g, shared garage)</option>
+                        <option value="2">Carport</option>
+                        <option value="4">Attached private garage</option>
+                    </select>
+                    <br>
+                    Washer-dryer in unit:<br>
+                    <select name="washer_dryer">
+                        <option value="1">Yes</option>
+                        <option value="0">No</option>
+                    </select>
+                    <br>
+                    Current/Intended listed price (for comparison):<br>
+                    <input type="text" name="price" placeholder="Guess the price">
+                    <br>
+                    Description:
+                   <textarea class="form-control" rows="3" name="desc" placeholder="Description of unit (e.g., craigslist description)"></textarea>
+                   <button class="btn btn-default" type='submit'>Submit</button>
+               </div>
+           </form>
+       </div>
+       <!-- 
+       <div class="highlight">
+       </div> -->
+   </section>
+
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-10 col-lg-offset-1 text-center">
+                    <ul class="list-unstyled">
+                        <li><i class="fa fa-envelope-o fa-fw"></i>  <a href="mailto:jwoleson@gmail.com">Contact Me</a>
+                        </li>
+                    </ul>
+                    <br>
+                    <ul class="list-unstyled">
+                        <li>
+                            <a href="github.com/jonoleson/PriceMyRental">Source on Github</i></a>
+                        </li>
+                    </ul>
+                    <hr class="small">
+                    <p class="text-muted">Copyright &copy; Jon Oleson 2015</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- jQuery -->
+    <script src="static/js/jquery.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="static/js/bootstrap.min.js"></script>
+
+    <!-- Custom Theme JavaScript -->
+    <script>
+    // Closes the sidebar menu
+    $("#menu-close").click(function(e) {
+        e.preventDefault();
+        $("#sidebar-wrapper").toggleClass("active");
+    });
+
+    // Opens the sidebar menu
+    $("#menu-toggle").click(function(e) {
+        e.preventDefault();
+        $("#sidebar-wrapper").toggleClass("active");
+    });
+
+    // Scrolls to the selected menu item on the page
+    $(function() {
+        $('a[href*=#]:not([href=#])').click(function() {
+            if (location.pathname.replace(/^\//, '') == this.pathname.replace(/^\//, '') || location.hostname == this.hostname) {
+
+                var target = $(this.hash);
+                target = target.length ? target : $('[name=' + this.hash.slice(1) + ']');
+                if (target.length) {
+                    $('html,body').animate({
+                        scrollTop: target.offset().top
+                    }, 1000);
+                    return false;
+                }
+            }
+        });
+    });
+    </script>
+
+</body>
+
+</html>

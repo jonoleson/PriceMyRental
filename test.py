@@ -8,7 +8,6 @@ baths = 2
 neighborhood = 'mission district'
 address = '350 Alabama St, San Francisco CA, 94110'
 parking = 4 #Attached garage
-washer_dryer = 1 #Has in-unit w/d
 description = 'This beautiful Contemporary 1017 square foot condo home has 1 bedrooms and \
                 2.0 bathrooms in the vibrant and hip Inner Mission is a light-filled oasis \
                 with views to the west and Twin Peaks. The main level features an open \

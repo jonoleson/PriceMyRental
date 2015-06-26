@@ -192,10 +192,10 @@ def featurize_single_listing(single_df, kd, search_df, nhood_medians, vectorizer
 
 def create_testing_df(df):
     #Subset dataframe into only features that will be used in testing
-    testing_df = df[['beds', 'baths', 'parking', 'washer_dryer', 
-                     'price_1bd_med', 'med_neighbor_price', 'Latent Feature 1', 
-                     'Latent Feature 2', 'Latent Feature 3', 'Latent Feature 4', 
-                     'price']]
+    testing_df = df[['beds', 'baths', 'parking', 'price_1bd_med',  
+                     'med_neighbor_price', 'Latent Feature 1', 
+                     'Latent Feature 2', 'Latent Feature 3',  
+                     'Latent Feature 4', 'price']]
     return testing_df
 
 

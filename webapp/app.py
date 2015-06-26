@@ -17,25 +17,25 @@ def index():
 def receive():
     f = request.form
 
-    beds         = int(f['beds'])
-    baths        = int(f['baths'])
-    address      = str(f['address'])
+    beds         = float(f['beds'])
+    baths        = float(f['baths'])
+    address      = str(f['address']) + ' ' + str(f['zip'])
     neighborhood = str(f['neigh'])
-    parking      = int(f['parking'])
-    washer_dryer = int(f['washer_dryer'])
-    description  = str(f['description'])
+    parking      = float(f['parking'])
+    description  = str(f['desc'])
     price        = int(f['price'])
 
     predict_statement, compare_statement = run_pmr(beds, baths, address, neighborhood, parking, 
-                                                   washer_dryer, description, price,
-                                                   app.rfr, app.search_df, app.nhood_medians, 
+                                                   description, price, app.rfr, 
+                                                   app.search_df, app.nhood_medians, 
                                                    app.vectorizer, app.nmf, app.kd)
 
-    print predict_statement
-    print compare_statement
     # Your code here to process data
 
-    return render_template('index.html')
+    return render_template('result.html', prediction=predict_statement, 
+                            comparison=compare_statement)
+
+
 
 # launch
 if __name__ == "__main__":
