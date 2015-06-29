@@ -102,18 +102,23 @@ def load_data_and_models():
     return rfr, search_df, nhood_medians, vectorizer, nmf, kd 
 
 def run_pmr(beds, baths, address, neighborhood, parking, 
-        description, price, rfr, search_df, nhood_medians, 
-        vectorizer, nmf, kd):
+            description, price, rfr, search_df, nhood_medians, 
+            vectorizer, nmf, kd):
 
-    
+    print '1'
     pmr = PriceMyRental(rfr)
+    print '2'
     pmr.get_attributes(description, beds, baths, address, 
                        neighborhood, parking, price)
+    print '3'
     pmr.get_coords()
+    print '4'
     pmr.build_df()
+    print '5'
     pmr.featurize_listing(kd, search_df, nhood_medians, vectorizer, nmf)
+    print '6'
     predict_statement, compare_statement = pmr.predict()
-
+    print '7'
     return predict_statement, compare_statement
 
 

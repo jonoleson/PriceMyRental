@@ -30,6 +30,7 @@ Method:
 -This ensured that fewer relevant listings were lost due to the splitting mechanism of the KD-Tree
 
 Results:
+R^2: 0.784
 RMSE: 834.207 with k=5, 831.634 with k=10
 
 
@@ -54,3 +55,7 @@ RMSE: 677.360
 ****Nearest Neighbors + NMF + RF Regressor with parameter adjustment**
 Method:
 -Same as previous final model but cut out the washer_dryer parameter because it was having irrational effects on novel predictions during app testing.
+
+Results:
+R^2: 0.856
+RMSE: 685.626Featurize dataframe

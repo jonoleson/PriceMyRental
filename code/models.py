@@ -20,6 +20,16 @@ def random_forest_regressor(df):
     rmse = np.mean((ytest - clf.predict(xtest))**2)**0.5
     return 'R^2 is ', score, 'RMSE is ', rmse,'Feature Importances are ', zip(feature_names, feat_imps)
 
+def build_production_rfr(df):
+    y = df.pop('price').values
+    X = df.values
+    feature_names = df.columns 
+    clf = RandomForestRegressor()
+
+    clf.fit(X, y)
+    cPickle.dump(clf, open('models/rfr.pkl', 'wb'))
+    score = clf.score(X, y)
+    print score  
 
 def ridge_regressor(df):
     y = df.pop('price').values

@@ -13,7 +13,6 @@ class PriceMyRental(object):
         self.neighborhood = None
         self.address      = None
         self.parking      = None
-        self.washer_dryer = None
         self.price        = None
         self.lat          = None
         self.lon          = None
@@ -21,14 +20,13 @@ class PriceMyRental(object):
         self.rfr          = rfr 
 
     def get_attributes(self, description, beds, baths, address, 
-                       neighborhood, parking, washer_dryer, price):
+                       neighborhood, parking, price):
         self.description         = description
         self.beds                = beds
         self.baths               = baths
         self.neighborhood        = neighborhood
         self.address             = address
         self.parking             = parking
-        self.washer_dryer        = washer_dryer
         self.price               = price
 
     def get_coords(self):
@@ -39,7 +37,7 @@ class PriceMyRental(object):
 
     def build_df(self):
         cols = ['beds', 'baths', 'neighborhood', 'lat', 'lon',
-                'parking', 'washer_dryer', 'body', 'price']
+                'parking', 'body', 'price']
 
         single_listing_df = pd.DataFrame(columns=cols, index=xrange(1))
 
@@ -49,7 +47,6 @@ class PriceMyRental(object):
         single_listing_df['lat']          = self.lat
         single_listing_df['lon']          = self.lon
         single_listing_df['parking']      = self.parking
-        single_listing_df['washer_dryer'] = self.washer_dryer
         single_listing_df['body']         = self.description
         single_listing_df['price']        = self.price
 
@@ -105,13 +102,13 @@ def load_data_and_models():
     return rfr, search_df, nhood_medians, vectorizer, nmf, kd 
 
 def run_pmr(beds, baths, address, neighborhood, parking, 
-        washer_dryer, description, price, rfr, search_df, 
-        nhood_medians, vectorizer, nmf, kd):
+            description, price, rfr, search_df, 
+            nhood_medians, vectorizer, nmf, kd):
 
 
     pmr = PriceMyRental(rfr)
     pmr.get_attributes(description, beds, baths, address, 
-                       neighborhood, parking, washer_dryer, price)
+                       neighborhood, parking, price)
     pmr.get_coords()
     pmr.build_df()
     pmr.featurize_listing(kd, search_df, nhood_medians, vectorizer, nmf)
