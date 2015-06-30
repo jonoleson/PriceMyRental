@@ -63,3 +63,11 @@ See the code for this section in [grid_search.py](/blob/master/code/grid_search.
 I built [PriceMyRental.io](pricemyrental.io) on top of the ["Stylish Portfolio"](http://startbootstrap.com/template-overviews/stylish-portfolio/) Bootstrap theme. 
 
 To review the backend code for the app, refer to [app.py](blob/master/webapp/app.py) and [pricemyrental.py](blob/master/webapp/pricemyrental.py), which contain the code that runs the app, and makes a prediction based on user input, respectively. 
+
+## Libraries Used
+
+* Numpy
+* Pandas
+* scikit-learn
+* Geopy
+* NLTK
