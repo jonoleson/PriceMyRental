@@ -1,3 +1,5 @@
+To try the app, go to [PriceMyRental.io](pricemyrental.io). I recommend testing using [real craigslist listings!](https://sfbay.craigslist.org/search/sfc/apa)
+
 PriceMyRental.io uses:
 
 # [Start Bootstrap](http://startbootstrap.com/) - [Stylish Portfolio](http://startbootstrap.com/template-overviews/stylish-portfolio/)
