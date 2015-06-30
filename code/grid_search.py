@@ -9,8 +9,9 @@ from sklearn.ensemble import RandomForestRegressor as RFR
 
 def grid_search(X, y):
     '''
-    Cross-validated grid search using Ridge Regressor and Random
-    Forest Regressor
+    INPUT: Array of feature values, vector of targets
+    OUTPUT: Returns saved pickled random forest at ridge regressor 
+    models with the optimal parameters, as well as the models themselves
     '''
 
     n_samples = X.shape[0]

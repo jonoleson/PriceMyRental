@@ -7,6 +7,9 @@ import cPickle
 class PriceMyRental(object):
 
     def __init__(self, rfr):
+        '''
+        Initializes the PriceMyRental (PMR) object 
+        '''
         self.description  = None
         self.beds         = None
         self.baths        = None
@@ -21,6 +24,10 @@ class PriceMyRental(object):
 
     def get_attributes(self, description, beds, baths, address, 
                        neighborhood, parking, price):
+        '''
+        Assigns the user-inputted listing attributes to the 
+        PMR object
+        '''
         self.description  = description
         self.beds         = beds
         self.baths        = baths
@@ -30,12 +37,19 @@ class PriceMyRental(object):
         self.price        = price
 
     def get_coords(self):
+        '''
+        Extracts coordinates (lat/long) from a user-inputted
+        address and assigns it to the PMR object 
+        '''
         geolocator = Nominatim()
         location   = geolocator.geocode(self.address)
         self.lat   = location.latitude
         self.lon   = location.longitude
 
     def build_df(self):
+        '''
+        Builds the single listing dataframe
+        '''
         cols = ['beds', 'baths', 'neighborhood', 'lat', 'lon',
                 'parking', 'body', 'price']
 
@@ -53,10 +67,18 @@ class PriceMyRental(object):
         self.df = single_listing_df
 
     def featurize_listing(self, kd, search_df, nhood_medians, vectorizer, nmf):
+        '''
+        Featurizes the single listing dataframe with latent features, 
+        neighborhood-level median, and nearest-neighbor median
+        '''
         self.df = featurize_single_listing(self.df, kd, search_df, 
                                            nhood_medians, vectorizer, nmf)
 
     def predict(self):
+        '''
+        Output a predicted price, and compare to the initial listed of
+        user-guessed price
+        '''
         testing_df = create_testing_df(self.df)
 
         y = int(testing_df.pop('price').values)
@@ -71,7 +93,7 @@ class PriceMyRental(object):
 
 def load_data_and_models():
     '''
-    Load the data and models needed to generate predictions
+    Load the data and models that will be used to build the PMR object
     '''
     rfr_file = open('models/rfr.pkl', 'rb')
     rfr = cPickle.load(rfr_file) 
@@ -104,8 +126,9 @@ def load_data_and_models():
 def run_pmr(beds, baths, address, neighborhood, parking, 
             description, price, rfr, search_df, 
             nhood_medians, vectorizer, nmf, kd):
-
-
+    '''
+    Build the PMR object and output a prediction 
+    '''
     pmr = PriceMyRental(rfr)
     pmr.get_attributes(description, beds, baths, address, 
                        neighborhood, parking, price)

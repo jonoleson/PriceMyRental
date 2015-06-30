@@ -9,16 +9,22 @@ from sklearn.decomposition import NMF
 from sklearn.neighbors import KDTree 
 import cPickle
 
-
-def create_search_df(df):
-    #Create a search_df to be used in finding median neighbors price for a single listing.
-    search_df = df[['beds', 'baths','neighborhood', 'price_1bd_med', 'price']]
-    search_df.to_csv('data/search_df.csv', index=False, encoding='utf-8')
-
+def load_clean_data():
+    '''
+    INPUT: None
+    OUTPUT: Pandas dataframe loaded from CSV saved in clean_data.py 
+    '''
+    df = pd.read_csv('data/sf_raw.csv', header = False)
+    return df
 
 def get_neighborhood_median(df):
+    '''
+    INPUT: Pandas dataframe
+    OUTPUT: Pandas dataframe with neighborhood-level price medians
+    for 1-bedrooms added as a feature
+    '''
     #Create df containing nighborhood median rents for 1-bedroom apartments
-    df_grouped = df[(df['beds']==1)].groupby('neighborhood').median()
+    df_grouped = df[(df['beds'] == 1)].groupby('neighborhood').median()
 
     #Set original df's index to the neighborhood field
     df.set_index('neighborhood', inplace=True)
@@ -27,25 +33,23 @@ def get_neighborhood_median(df):
     #neighborhood to sfdf
     df = df.join(df_grouped[['price']], rsuffix='_1bd_med')
 
+    #Reset the index
     df.reset_index(inplace=True)
     return df
  
 
 def get_median_neighbors(df, n_neighbors):
     '''
-    This function forecasts price by searching for n_neighbors closest 
-    listings to each listing and returning the median price of those 
-    listings. It does this by using a KD-Tree to efficiently find the
-    listings closest to the current listing by location (lat, lon). 
-    The indices of these closest listings are then used to find the 
-    5 closest listings that have the same layout (same # of beds and baths).
-    It returns an RMSE to test its baseline performance as a standalone 
-    model and returns a modified DataFrame that can be passed in to 
-    another model.
+    INPUT: Pandas dataframe, and the number of comparable neighbors
+    of each listing we'll take the median price of in adding the 
+    median_neighbor_prices feature
+    OUTPUT: Pandas dataframe with the median prices of the n_neighbors
+    closest comparables added as a feature. This is accomplished using a 
+    KD-Tree model to search for nearest-neighbors
     '''
-    kd_df = df[['lat', 'lon']]
+    kd_df  = df[['lat', 'lon']]
     kdvals = kd_df.values
-    kd = KDTree(kdvals, leaf_size = 1000)
+    kd     = KDTree(kdvals, leaf_size = 1000)
     cPickle.dump(kd, open('models/kd_tree.pkl', 'wb'))
     neighbors = kd.query(kdvals, k=350)
 
@@ -76,6 +80,10 @@ def get_median_neighbors(df, n_neighbors):
 
 
 def clean(list_of_docs):
+    '''
+    INPUT: Numpy array of text documents
+    OUTPUT: Numpy array of cleaned text docs
+    '''
     clean_docs = []
     for doc in list_of_docs:
         clean_data = re.sub("[^a-zA-Z]"," ", doc) #grabs only letters
@@ -86,12 +94,20 @@ def clean(list_of_docs):
 
 
 def tokenize(doc):
-    plv = PunktLanguageVars()
+    '''
+    INPUT: Document
+    OUTPUT: Tokenized and stemmed list of words from the document 
+    '''
+    plv      = PunktLanguageVars()
     snowball = SnowballStemmer('english')
     return [snowball.stem(word) for word in plv.word_tokenize(doc.lower())]
 
 
-def get_tfidf(clean_docs):
+def get_tfidf(clean_docs): 
+    '''
+    INPUT: Numpy array of documents
+    OUTPUT: TF-IDF vectorizer object, vectorized array of words from the corpus
+    '''
     vectorizer = TfidfVectorizer('corpus', tokenizer = tokenize,
                                   stop_words=stopwords.words('english'), 
                                   strip_accents='unicode', norm='l2')
@@ -102,6 +118,13 @@ def get_tfidf(clean_docs):
 
 
 def run_nmf(X, vectorizer, n_topics=4, print_top_words=False):
+    '''
+    INPUT: Vectorized word array, vectorizer object, number of latent 
+    features to uncover, whether to print the top words from each latent
+    feature
+    OUTPUT: Saves pickled NMF model, returns latent weights matrix that
+    can be concatenated with our dataset as additional features  
+    '''
     nmf = NMF(n_components=n_topics)
     nmf.fit(X)
     cPickle.dump(nmf, open('models/nmf.pkl', 'wb'))
@@ -120,6 +143,10 @@ def run_nmf(X, vectorizer, n_topics=4, print_top_words=False):
 
 
 def add_latent_features(df, n_topics):
+    '''
+    INPUT: Pandas dataframe, number of latent topics to detect 
+    OUTPUT: Pandas dataframe with latent weights added as features 
+    '''
     clean_text     = clean(df.body.values)
     vectorizer, X  = get_tfidf(clean_text)
     latent_weights = run_nmf(X, vectorizer, n_topics=n_topics)
@@ -131,16 +158,28 @@ def add_latent_features(df, n_topics):
 
 
 def featurize_and_save(df, n_topics, n_neighbors):
+    '''
+    INPUT: Pandas dataframe, number of latent topics to detect, 
+    number of comparable neighbors to take median from
+    OUTPUT: Saved CSV of fully-featurized dataframe  
+    '''
     df = add_latent_features(df, n_topics=4)
 
     df = get_median_neighbors(df, n_neighbors=n_neighbors)
-    #A few extremely unique listings couldn't find a median price for comparables, 
-    #so we're dropping them from the dataset 
+    # A few extremely unique listings couldn't find a median price for comparables, 
+    # so we're dropping them from the dataset 
     df = df.dropna(axis=0)
-    df.to_csv('data/complete_df.csv', index=False, encoding='utf-8')
+    df.to_csv('../data/complete_df.csv', index=False, encoding='utf-8')
  
 
 def get_single_listing_median_neighbors(single_df, kd, search_df):
+    '''
+    INPUT: Pandas dataframe made from single listing of user input, 
+    our KD-Tree object, and a 'search dataframe' to find the
+    nearest-neighbors median price
+    OUTPUT: Single-listing pandas dataframe with nearest-neighbors 
+    median price added as a feature  
+    '''
     n_beds  = int(single_df.beds.values)
     n_baths = int(single_df.baths.values)
     lat     = float(single_df.lat.values)
@@ -158,17 +197,28 @@ def get_single_listing_median_neighbors(single_df, kd, search_df):
         ]
 
     comp_listings = [item for item in listing_neighbors if item in sub_df.index]
-    med_price = search_df.price[comp_listings][:10].median()
+    med_price     = search_df.price[comp_listings][:10].median()
     single_df['med_neighbor_price'] = med_price
+    
     return single_df   
 
 
 def run_nmf_single(X, nmf):
+    '''
+    INPUT: Vectorized word array of single listing, NMF model object 
+    OUTPUT: Latent weights of single listing
+    '''
     H = nmf.transform(X)
     return H
 
 
 def add_latent_features_single(df, vectorizer, nmf):
+    '''
+    INPUT: Pandas dataframe of single listing, TF-IDF vectorizer object, 
+    NMF model object
+    OUTPUT: Single-listing pandas dataframe with latent weights added 
+    as features 
+    '''
     clean_text     = clean(df.body.values)
     X              = vectorizer.transform(clean_text)
     latent_weights = run_nmf_single(X, nmf)
@@ -176,10 +226,17 @@ def add_latent_features_single(df, vectorizer, nmf):
                                 ['Latent Feature %s' % (i+1) for i in range(4)]))
     
     concat_df = pd.concat([df, latent_df], axis=1)
+
     return concat_df
 
 
 def featurize_single_listing(single_df, kd, search_df, nhood_medians, vectorizer, nmf):
+    '''
+    INPUT: Pandas dataframe of single listing, KD-Tree object, search dataframe, 
+    dictionary of negihborhoods and their price medians, TF-IDF vectorizer object, 
+    NMF model object
+    OUTPUT: Fully-featurized single-listing dataframe 
+    '''
     #Add the neighborhood 1-bedroom median price to the single listing dataframe
     single_df['price_1bd_med'] = nhood_medians[single_df['neighborhood'][0]]
 
@@ -191,11 +248,26 @@ def featurize_single_listing(single_df, kd, search_df, nhood_medians, vectorizer
 
 
 def create_testing_df(df):
+    '''
+    INPUT: Pandas dataframe
+    OUTPUT: A 'testing dataframe' that contains only the features that will be 
+    used in the regression model to output predictions
+    '''
     #Subset dataframe into only features that will be used in testing
-    testing_df = df[['beds', 'baths', 'parking', 'price_1bd_med',
+    testing_df = df[['beds', 'baths', 'parking', 'price_1bd_med',  
                      'med_neighbor_price', 'Latent Feature 1', 
-                     'Latent Feature 2', 'Latent Feature 3',  
+                     'Latent Feature 2', 'Latent Feature 3', 
                      'Latent Feature 4', 'price']]
     return testing_df
 
+
+def create_search_df(df):
+    '''
+    INPUT: The fully featurized dataframe 
+    OUTPUT: A 'search dataframe' that will be used to find neighborhood-level
+    price medians as well as nearest-neighbor medians for single, user-submitted listings.
+    '''
+    #Create a search_df to be used in finding median neighbors price for a single listing.
+    search_df = df[['beds', 'baths','neighborhood', 'price_1bd_med', 'price']]
+    search_df.to_csv('data/search_df.csv', index=False, encoding='utf-8')
 

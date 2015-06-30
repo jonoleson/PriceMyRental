@@ -2,13 +2,13 @@ import os
 from flask import Flask, render_template, request
 from pricemyrental import PriceMyRental, load_data_and_models, run_pmr
 
-# initialization
+# Initialization
 app = Flask(__name__)
 
-#Load models necessary data
+# Load models, necessary data
 app.rfr, app.search_df, app.nhood_medians, app.vectorizer, app.nmf, app.kd = load_data_and_models()
 
-# controllers
+# Controllers
 @app.route("/")
 def index():
     return render_template('index.html')

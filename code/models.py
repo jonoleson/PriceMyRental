@@ -6,6 +6,11 @@ import cPickle
 
 
 def random_forest_regressor(df):
+    '''
+    INPUT: Pandas dataframe
+    OUTPUT: R^2 and Mean Absolute Error performance metrics, feature importances
+    '''
+
     y                            = df.pop('price').values
     X                            = df.values
     feature_names                = df.columns
@@ -13,27 +18,36 @@ def random_forest_regressor(df):
                                                     random_state=5) 
 
     clf = RandomForestRegressor()
-
     clf.fit(xtrain, ytrain)
-    cPickle.dump(clf, open('models/rfr.pkl', 'wb'))
-    score = clf.score(xtest, ytest)
-    feat_imps = clf.feature_importances_
-    rmse = np.mean((ytest - clf.predict(xtest))**2)**0.5
-    return 'R^2 is ', score, 'RMSE is ', rmse,'Feature Importances are ', \
-            zip(feature_names, feat_imps)
+    score       = clf.score(xtest, ytest)
+    feat_imps   = clf.feature_importances_
+    ypredict    = clf.predict(xtest)
+    mae         = np.mean(np.absolute(ytest - ypredict))
+    mae_percent = np.mean(np.absolute(ytest - ypredict) / ytest)
+    return 'R^2 is ', score, 'MAE is ', mae, 'MAE percent is ', mae_percent, \
+           'Feature Importances are ', zip(feature_names, feat_imps)
 
 def build_production_rfr(df):
+    '''
+    INPUT: Pandas dataframe
+    OUTPUT: Saved pickled model that's been trained on the full dataset, 
+    to be used in the app 
+    '''
     y             = df.pop('price').values
     X             = df.values
     feature_names = df.columns 
     clf           = RandomForestRegressor()
 
     clf.fit(X, y)
-    cPickle.dump(clf, open('models/rfr.pkl', 'wb'))
+    cPickle.dump(clf, open('../models/rfr.pkl', 'wb'))
     score = clf.score(X, y)
     print score  
 
 def ridge_regressor(df):
+    '''
+    INPUT: Pandas dataframe
+    OUTPUT: R^2 and Mean Absolute Error performance metrics, feature coefficients
+    '''
     y                            = df.pop('price').values
     X                            = df.values
     feature_names                = df.columns
@@ -42,17 +56,22 @@ def ridge_regressor(df):
 
     clf = Ridge(alpha=1.0)
     clf.fit(xtrain, ytrain)
-    cPickle.dump(clf, open('models/ridge_model.pkl', 'wb'))
 
-    score     = clf.score(xtest, ytest)
-    feat_imps = clf.coef_
-    rmse      = np.mean((ytest - clf.predict(xtest))**2)**0.5
-    return 'R^2 is ', score, 'RMSE is ', rmse,'Feature coefficients are ', \
-            zip(feature_names, feat_imps)
+    score       = clf.score(xtest, ytest)
+    feat_imps   = clf.coef_
+    ypredict    = clf.predict(xtest)
+    mae         = np.mean(np.absolute(ytest - ypredict))
+    mae_percent = np.mean(np.absolute(ytest - ypredict) / ytest)
+    return 'R^2 is ', score, 'RMSE is ', rmse, 'MAE percent is ', mae_percent, \
+           'Feature coefficients are ', zip(feature_names, feat_imps)
 
 def graph_trend(df):
-    dfcopy = df.copy()
-    df_grouped_median = dfcopy[(dfcopy['beds']==1)].groupby('year-month').median()
+    '''
+    INPUT: Pandas dataframe
+    OUTPUT: Graph of monthly trend in median rents citywide
+    '''
+    dfcopy            = df.copy()
+    df_grouped_median = dfcopy[(dfcopy['beds'] == 1)].groupby('year-month').median()
     plt.figure(figsize=(10,10))
     df_grouped_median['price'].plot()
 

@@ -3,27 +3,36 @@ from datetime import timedelta, date
 import urllib2
 
 
-#Function to iterate through dates
+# Function to iterate through dates
 def daterange(start_date, end_date):
-    for n in range(int ((end_date - start_date).days)):
-        single_date = start_date + timedelta(n)
-        yield single_date.strftime('%Y-%m-%d')
+  '''
+  Input: A start date and end date in datetime format
+  Output: A range of dates, in 'YYYY-MM-DD' format
+  '''
+  for n in range(int((end_date - start_date).days)):
+    single_date = start_date + timedelta(n)
+    yield single_date.strftime('%Y-%m-%d')
+
 
 def get_data(start_date, end_date, one_city=False, print_urls=False):
-  #Get dataframe of cities
+  '''
+  Input: Start and end dates, in datetime format
+  Output: A CSV (or CSVs) of the parsed craigslist data
+  '''
+  # Get dataframe of cities
   cities = pd.read_csv('data/ongoing_cities.csv', header = False)
 
   # Headers for our target dataframe
   cols = ['id', 'heading', 'body', 'price', 'lat', 'long', 'region',  
           'neighborhood', 'beds', 'baths', 'parking']
 
-  #If True, parse only the data for San Francisco
-  if one_city==True:
+  # If True, parse only the data for San Francisco
+  if one_city:
     cities = cities[(cities['city'] == 'San Francisco')]
 
 
   for i in xrange(len(cities)):
-    if one_city==False:
+    if not one_city:
       city  = cities.city_code[i]
       state = cities.state_code[i]
     else:
@@ -31,44 +40,50 @@ def get_data(start_date, end_date, one_city=False, print_urls=False):
       state = cities.state_code.values[0]
     city_df = pd.DataFrame(columns=cols)
 
-    #Append data to city_df
+    # Append data to city_df
     for date in daterange(start_date, end_date):
       done_parsing = False
       k=0
 
       while done_parsing == False:
-        url = 'https://s3-us-west-2.amazonaws.com/hoodsjson/%s/%s/%s/%s.html' %(state, city, date, k)
-        #If print_urls==True, Print out the url of each json as it's being parsed
+        url = 'https://s3-us-west-2.amazonaws.com/hoodsjson/%s/%s/%s/%s.html' \
+              %(state, city, date, k)
+        # If print_urls==True, Print out the url of each json as it's being parsed
         if print_urls==True:
           print url
-        #Read json into pandas dataframe. Some days may have no data and 
-        #may throw an error when loaded, so using try/except to control for this.
+        # Read json into pandas dataframe. Some days may have no data and 
+        # may throw an error when loaded, so using try/except to control for this.
         try: 
           raw_df = pd.read_json(url)
         except urllib2.HTTPError:
           print 'No data this day'
           break
 
-        #Test if loaded df has any data (the last json file of a day, if that day contains data at all,
-        #is always valid but empty)
+        # Test if loaded df has any data (the last json file of a day, if 
+        # that day contains data at all, is always valid but is empty)
         if len(raw_df) > 0:
-          #Filter df for only craigslist data
+          # Filter df for only craigslist data
           condition = raw_df['source'] == 'CRAIG'
           raw_df    = raw_df[condition]
           raw_df    = raw_df.reset_index()
           del raw_df['index']
-          #Parse raw_df into a usable format
+          # Parse raw_df into a usable format
           results_df = parse_info(raw_df, cols)
           city_df    = city_df.append(results_df)
           k         += 1   
         else:
           done_parsing = True
 
-    #Write city_df to a csv inside a 'data' folder. End result should be a csv file for each city
-    city_df.to_csv('data/%s_%s.csv' %(city, state), index=False, encoding='utf-8') 
+    # Write city_df to a csv inside a 'data' folder. End result should be 
+    # a csv file for each city
+    city_df.to_csv('../data/%s_%s.csv' %(city, state), index=False, encoding='utf-8') 
 
 
 def parse_info(df, cols):
+  '''
+  Input: Partially parsed pandas dataframe, column names for target dataframe
+  Output: Fully parsed pandas dataframe with explicit features
+  '''
   results_df            = pd.DataFrame(columns = cols, index = xrange(len(df)))
   results_df['id']      = df['id']
   results_df['heading'] = df['heading']
@@ -77,7 +92,7 @@ def parse_info(df, cols):
   results_df['date']    = pd.to_datetime(df['timestamp'], unit='s')
   
   #The conditionals here are to test if the field we're searching for is
-  #present in a given listing. Some listings are missing fields.
+  #present in a given listing. Some listings have missing fields.
   for i in xrange(len(df)):
     if 'lat' and 'lon' in df.iloc[i]['location']:
       results_df.ix[i,'lat'] = float(df.iloc[i]['location']['lat'])
