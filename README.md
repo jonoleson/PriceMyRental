@@ -34,7 +34,7 @@ After feature engineering and subsetting for only features used in the final reg
 3. Parking amenity (ranked 0-4 depending on type of parking amenity)
 4. Neighborhood-wide median price of a 1-bedroom listing
 5. Median price of 10 geographically closest comparables (same number of beds/baths)
-6-9. 4 latent features extracted from description text
+6. 4 latent features extracted from description text
 
 Take a look at [featurize.py](/blob/master/code/featurize.py) to review the code for this section. 
 
