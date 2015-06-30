@@ -29,6 +29,7 @@ I further featurized the dataset by vectorizing each listing's description text 
 
 #### Final Dataset
 After feature engineering and subsetting for only features used in the final regression model, the dataset consisted of the following features:
+
 1. Number of beds
 2. Number of baths
 3. Parking amenity (ranked 0-4 depending on type of parking amenity)
