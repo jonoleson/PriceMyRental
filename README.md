@@ -50,3 +50,11 @@ The performance-breakdown was as follows:
 | Standalone neighbors median      | 0.784 |   
 | Random forest regressor + NMF latent features | 0.807 |    
 | RF regressor + latent features + neighbors median| 0.856 |
+
+See the code for this section in [grid_search.py](/blob/master/code/grid_search.py) and [models.py](/blob/master/code/models.py), although the code for running the standalone neighbors median model is in [featurize.py](/blob/master/code/featurize.py). 
+
+## The WebApp
+
+I built [PriceMyRental.io](pricemyrental.io) on top of the ["Stylish Portfolio"](http://startbootstrap.com/template-overviews/stylish-portfolio/) Bootstrap theme. 
+
+To review the backend code for the app, refer to [app.py](blob/master/webapp/app.py) and [pricemyrental.py](blob/master/webapp/pricemyrental.py), which contain the code that runs the app, and makes a prediction based on user input, respectively. 
