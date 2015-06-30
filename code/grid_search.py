@@ -9,7 +9,7 @@ from sklearn.ensemble import RandomForestRegressor as RFR
 
 def grid_search(X, y):
     '''
-    cross validated grid search using Ridge Regressor and Random
+    Cross-validated grid search using Ridge Regressor and Random
     Forest Regressor
     '''
 
@@ -26,7 +26,7 @@ def grid_search(X, y):
     print gs.best_params_
     print gs.best_score_
 
-    #cPickle.dump(ridge, open('models/ridge.pkl', 'wb'))
+    cPickle.dump(ridge, open('models/ridge.pkl', 'wb'))
 
     pars = {'max_depth': [5, 8, 10, 20, 50, 100],
             'min_samples_split': [2, 3, 5, 10, 20]}
@@ -38,8 +38,8 @@ def grid_search(X, y):
     print gs.best_params_
     print gs.best_score_
 
-    #cPickle.dump(rfr, open('models/rfr.pkl', 'wb'))
-    #return ridge, rfr
+    cPickle.dump(rfr, open('models/rfr.pkl', 'wb'))
+    return ridge, rfr
 
 
 if __name__ == '__main__':
@@ -47,5 +47,5 @@ if __name__ == '__main__':
     testing_df = create_testing_df(df)
     y = testing_df.pop('price').values
     X = testing_df.values
-    #ridge, rfr = grid_search(X, y)
+    ridge, rfr = grid_search(X, y)
     grid_search(X, y)

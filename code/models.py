@@ -6,10 +6,11 @@ import cPickle
 
 
 def random_forest_regressor(df):
-    y = df.pop('price').values
-    X = df.values
-    feature_names = df.columns
-    xtrain, xtest, ytrain, ytest = train_test_split(X, y, test_size=0.3, random_state=5) 
+    y                            = df.pop('price').values
+    X                            = df.values
+    feature_names                = df.columns
+    xtrain, xtest, ytrain, ytest = train_test_split(X, y, test_size=0.3, 
+                                                    random_state=5) 
 
     clf = RandomForestRegressor()
 
@@ -18,13 +19,14 @@ def random_forest_regressor(df):
     score = clf.score(xtest, ytest)
     feat_imps = clf.feature_importances_
     rmse = np.mean((ytest - clf.predict(xtest))**2)**0.5
-    return 'R^2 is ', score, 'RMSE is ', rmse,'Feature Importances are ', zip(feature_names, feat_imps)
+    return 'R^2 is ', score, 'RMSE is ', rmse,'Feature Importances are ', \
+            zip(feature_names, feat_imps)
 
 def build_production_rfr(df):
-    y = df.pop('price').values
-    X = df.values
+    y             = df.pop('price').values
+    X             = df.values
     feature_names = df.columns 
-    clf = RandomForestRegressor()
+    clf           = RandomForestRegressor()
 
     clf.fit(X, y)
     cPickle.dump(clf, open('models/rfr.pkl', 'wb'))
@@ -32,18 +34,21 @@ def build_production_rfr(df):
     print score  
 
 def ridge_regressor(df):
-    y = df.pop('price').values
-    X = df.values
-    feature_names = df.columns
-    xtrain, xtest, ytrain, ytest = train_test_split(X, y, test_size=0.3, random_state=0)
+    y                            = df.pop('price').values
+    X                            = df.values
+    feature_names                = df.columns
+    xtrain, xtest, ytrain, ytest = train_test_split(X, y, test_size=0.3, 
+                                                    random_state=0)
 
     clf = Ridge(alpha=1.0)
     clf.fit(xtrain, ytrain)
     cPickle.dump(clf, open('models/ridge_model.pkl', 'wb'))
-    score = clf.score(xtest, ytest)
+
+    score     = clf.score(xtest, ytest)
     feat_imps = clf.coef_
-    rmse = np.mean((ytest - clf.predict(xtest))**2)**0.5
-    return 'R^2 is ', score, 'RMSE is ', rmse,'Feature coefficients are ', zip(feature_names, feat_imps)
+    rmse      = np.mean((ytest - clf.predict(xtest))**2)**0.5
+    return 'R^2 is ', score, 'RMSE is ', rmse,'Feature coefficients are ', \
+            zip(feature_names, feat_imps)
 
 def graph_trend(df):
     dfcopy = df.copy()

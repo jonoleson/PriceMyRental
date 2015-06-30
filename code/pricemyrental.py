@@ -21,13 +21,13 @@ class PriceMyRental(object):
 
     def get_attributes(self, description, beds, baths, address, 
                        neighborhood, parking, price):
-        self.description         = description
-        self.beds                = beds
-        self.baths               = baths
-        self.neighborhood        = neighborhood
-        self.address             = address
-        self.parking             = parking
-        self.price               = price
+        self.description  = description
+        self.beds         = beds
+        self.baths        = baths
+        self.neighborhood = neighborhood
+        self.address      = address
+        self.parking      = parking
+        self.price        = price
 
     def get_coords(self):
         geolocator = Nominatim()

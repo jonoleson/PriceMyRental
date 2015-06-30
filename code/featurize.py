@@ -27,6 +27,7 @@ def get_neighborhood_median(df):
     #neighborhood to sfdf
     df = df.join(df_grouped[['price']], rsuffix='_1bd_med')
 
+    #Reset the index
     df.reset_index(inplace=True)
     return df
  
@@ -43,9 +44,9 @@ def get_median_neighbors(df, n_neighbors):
     model and returns a modified DataFrame that can be passed in to 
     another model.
     '''
-    kd_df = df[['lat', 'lon']]
+    kd_df  = df[['lat', 'lon']]
     kdvals = kd_df.values
-    kd = KDTree(kdvals, leaf_size = 1000)
+    kd     = KDTree(kdvals, leaf_size = 1000)
     cPickle.dump(kd, open('models/kd_tree.pkl', 'wb'))
     neighbors = kd.query(kdvals, k=350)
 
@@ -86,7 +87,7 @@ def clean(list_of_docs):
 
 
 def tokenize(doc):
-    plv = PunktLanguageVars()
+    plv      = PunktLanguageVars()
     snowball = SnowballStemmer('english')
     return [snowball.stem(word) for word in plv.word_tokenize(doc.lower())]
 
@@ -158,13 +159,15 @@ def get_single_listing_median_neighbors(single_df, kd, search_df):
         ]
 
     comp_listings = [item for item in listing_neighbors if item in sub_df.index]
-    med_price = search_df.price[comp_listings][:10].median()
+    med_price     = search_df.price[comp_listings][:10].median()
     single_df['med_neighbor_price'] = med_price
+    
     return single_df   
 
 
 def run_nmf_single(X, nmf):
     H = nmf.transform(X)
+
     return H
 
 
@@ -176,6 +179,7 @@ def add_latent_features_single(df, vectorizer, nmf):
                                 ['Latent Feature %s' % (i+1) for i in range(4)]))
     
     concat_df = pd.concat([df, latent_df], axis=1)
+
     return concat_df
 
 
