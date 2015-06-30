@@ -42,7 +42,7 @@ Take a look at [featurize.py](/blob/master/code/featurize.py) to review the code
 
 To select the regression model, I ran a grid-search on parameters for a random forest regressor and a ridge regressor. The random forest model yielded superior performance, and was the model I used going forward. I compared performance of each layer of feature engineering and modeling to my "baseline" model which used a random forest regressor predicting off of the base-level dataset, which included neighborhood-level price medians, but lacked latent textual features and the nearest-comparables median price. I also tested performance of only using nearest-comparables median price (the "neighbors median" model) as a second baseline. R^2 was calculated using a 70/30 train-test split, except the standalone neighbors median, which needed no training.
 
-The performance-breakdown was as follows:
+The performance breakdown was as follows:
 
 | Model        | R^2          | 
 | ------------- |:-------------:| 
