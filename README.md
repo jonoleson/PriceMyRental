@@ -21,7 +21,7 @@ Feature engineering was by far the most crucial element of this project, allowin
 
 * The median price of an average-sized unit (in our case, a 1-bedroom) in the neighborhood at large 
 * The median price of the geographically closest comparables (same number of beds and baths) 
-* Whatever information can be extracted from the listing description that may indicate a higher or lower level of quality. 
+* Whatever information can be extracted from the listing description that may indicate a higher or lower level of quality 
 
 #### Nearest-Neighbor Search with KD-Trees
 Finding the geographically closest comparable listings to any given listing proved to be no trivial task. A brute force method, which would involve calculating distances between each listing and every other listing in the dataset, would be completely computationally infeasible. I had to find a more efficient method, and found it with [KD-Trees](https://www.youtube.com/watch?v=TLxWtXEbtFE). I used a KD-Tree to recursively partition my dataset by latitude and longitude, then searching for [nearest neighbors](https://en.wikipedia.org/wiki/K-d_tree#Nearest_neighbour_search) using the tree structure to eliminate large sections of the search space. 
