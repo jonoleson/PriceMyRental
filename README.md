@@ -5,15 +5,15 @@
 
 ## Overview
 
-San Francisco has one the hottest rental markets in the nation, and immense variation according to location and amenities. My goal is to accurately predict market prices for units anywhere in the city. I accomplish this by applying Natural Language Processing (NLP), binary space partitioning, and tree-based regression methods to 9 months of SF rental listings from craigslist. 
+San Francisco has one the hottest rental markets in the nation, and immense variation according to location and amenities. My goal is to accurately predict market prices for units anywhere in the city. I accomplish this by applying Natural Language Processing (NLP), binary space partitioning, and tree-based regression methods to 9 months of SF rental listings. 
 
-Test the app for yourself at [PriceMyRental.io](https://pricemyrental.io). I recommend testing using [craigslist listings.](https://sfbay.craigslist.org/search/sfc/apa)
+Test the app for yourself at [PriceMyRental.io](https://pricemyrental.io). I recommend testing using [real housing listings at this popular classifieds site.](https://sfbay.craigslist.org/search/sfc/apa)
 
 ## The Data
 
-I was lucky to get access to 9 months of craigslist rental listing data that has been scraped and stored in AWS buckets in JSON files. Parsing this data was tricky; some days had no data, and many listings had missing values. To see how I collected the data, refer to [get_data.py](/blob/master/code/get_data.py). The code is written to be able to parse data from all 25 metro areas I have access to, though in practice I only parsed the San Francisco data to intentionally limit the scope of the project. For each listing, I collected the listing ID, location (in coordinates), neighborhood, number of beds, number of baths, the listing description, and parking information.
+I was lucky to get access to 9 months of rental listing data from a popular classifieds website that has been scraped and stored in AWS buckets in JSON files. Parsing this data was tricky; some days had no data, and many listings had missing values. To see how I collected the data, refer to [get_data.py](/blob/master/code/get_data.py). The code is written to be able to parse data from all 25 metro areas I have access to, though in practice I only parsed the San Francisco data to intentionally limit the scope of the project. For each listing, I collected the listing ID, location (in coordinates), neighborhood, number of beds, number of baths, the listing description, and parking information.
 
-Next, I cleaned and de-duplicated the data. I started filtering for data with reliable neighborhood attributes (craigslist standarizes this for San Francisco listings but some posters don't use the pre-set neighborhood option). Then I dropped duplicates according to posting ID and body description text. This alone reduced the rows in the dataset from over 200k to around 75k. To review this code, refer to [clean_data.py](/blob/master/code/clean_data.py). 
+Next, I cleaned and de-duplicated the data. I started filtering for data with reliable neighborhood attributes. Then I dropped duplicates according to posting ID and body description text. This alone reduced the rows in the dataset from over 200k to around 75k. To review this code, refer to [clean_data.py](/blob/master/code/clean_data.py). 
 
 ## Feature Engineering 
 
