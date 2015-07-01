@@ -11,6 +11,7 @@ def load_data():
     raw_df = pd.read_csv('../data/USA-SFO-SNF_USA-CA.csv', header = False)
     return raw_df
 
+
 def filter_neighborhoods(raw_df):
     '''
     Input: Pandas dataframe
@@ -34,6 +35,7 @@ def filter_neighborhoods(raw_df):
     sfdf = sfdf[condition]
 
     return sfdf
+
 
 def remove_dupes(sfdf):
     '''
@@ -59,6 +61,7 @@ def remove_dupes(sfdf):
     # This should have reduced around 200k datapoints into roughly 75k 
     return sfdf
 
+
 def remove_outliers(sfdf):
     '''
     Input: Pandas dataframe
@@ -70,6 +73,7 @@ def remove_outliers(sfdf):
 
     return sfdf
 
+
 def get_year_month(sfdf):
     '''
     Input: Pandas dataframe
@@ -80,13 +84,15 @@ def get_year_month(sfdf):
     sfdf['year-month'] = yrmonths
 
     return sfdf
-    
+  
+
 def save_df(sfdf):
     '''
     Input: Fully-cleaned pandas dataframe
     Output: CSV file, saved to the data folder
     '''
     sfdf.to_csv('../data/sf_clean.csv', index=False, encoding='utf-8')
+
 
 def main():
     raw_df = load_data()

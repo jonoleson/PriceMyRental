@@ -9,6 +9,7 @@ from sklearn.decomposition import NMF
 from sklearn.neighbors import KDTree 
 import cPickle
 
+
 def load_clean_data():
     '''
     INPUT: None
@@ -16,6 +17,7 @@ def load_clean_data():
     '''
     df = pd.read_csv('data/sf_raw.csv', header = False)
     return df
+
 
 def get_neighborhood_median(df):
     '''
@@ -139,7 +141,7 @@ def run_nmf(X, vectorizer, n_topics=4, print_top_words=False):
                             for i in topic.argsort()[:-n_top_words - 1:-1]]))
             print()
 
-    return H #Return the H matrix
+    return H 
 
 
 def add_latent_features(df, n_topics):

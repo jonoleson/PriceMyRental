@@ -7,6 +7,7 @@ from sklearn.cross_validation import ShuffleSplit
 from sklearn.grid_search import GridSearchCV
 from sklearn.ensemble import RandomForestRegressor as RFR
 
+
 def grid_search(X, y):
     '''
     INPUT: Array of feature values, vector of targets

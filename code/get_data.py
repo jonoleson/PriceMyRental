@@ -136,10 +136,12 @@ def parse_info(df, cols):
 
   return results_df
 
+
 def main():
   start_date = date(2014, 9, 29)
   end_date   = date(2015, 6, 17)
   get_data(start_date, end_date, one_city=True, print_urls=True)
+
 
 if __name__=='__main__':
   main()
