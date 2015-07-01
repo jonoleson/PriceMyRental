@@ -18,8 +18,6 @@ PriceMyRental.io uses:
 ## [Start Bootstrap](http://startbootstrap.com/) - [Stylish Portfolio](http://startbootstrap.com/template-overviews/stylish-portfolio/)
 
 
-## Creator
-
 Start Bootstrap was created by and is maintained by **David Miller**, Managing Parter at [Iron Summit Media Strategies](http://www.ironsummitmedia.com/).
 
 * https://twitter.com/davidmillerskt
