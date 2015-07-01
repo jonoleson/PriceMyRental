@@ -1,4 +1,11 @@
-To try the app, go to [PriceMyRental.io](https://pricemyrental.io). I recommend testing using [real craigslist listings!](https://sfbay.craigslist.org/search/sfc/apa)
+To try the app, go to PriceMyRental.io. I recommend testing using [listings from this popular classifieds site](https://sfbay.craigslist.org/search/sfc/apa)
+
+Question: How might one break this app?
+
+Answer: So many ways! For now. 
+Basically, for the app to work in its current iteration, you need to:
+1. Fill out every field in the form
+2. Enter parameters for bedrooms and bathrooms that realistically exist (I recommend just testing it with real listings). If you try to find the price of a place with 5 beds and only 1 bath, it will probably break. 
 
 PriceMyRental.io uses:
 
