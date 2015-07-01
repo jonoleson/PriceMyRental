@@ -7,7 +7,7 @@
 
 San Francisco has one the hottest rental markets in the nation, and immense variation according to location and amenities. My goal is to accurately predict market prices for units anywhere in the city. I accomplish this by applying Natural Language Processing (NLP), binary space partitioning, and tree-based regression methods to 9 months of SF rental listings. 
 
-For instructions on using the web app, [go here](../tree/master/webapp).
+For instructions on using the web app, [go here](https://github.com/jonoleson/PriceMyRental/tree/master/webapp).
 
 ## The Data
 
