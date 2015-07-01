@@ -49,12 +49,12 @@ To select the regression model, I ran a grid-search on parameters for a random f
 
 The performance breakdown was as follows:
 
-| Model        | Mean Absolute Percent Error          | 
-| ------------- |:-------------:| 
-| Standalone random forest regressor     | 19.5% | 
-| Standalone neighbors median      | 15.4% |   
-| Random forest regressor + NMF latent features | 15.4% |    
-| RF regressor + latent features + neighbors median| 12.7% |
+| Model        | Mean Absolute Percent Error    | R^2 |
+| ------------- |:---------------------------:|:-----:|
+| Standalone random forest regressor     | 19.5% | 0.730 |
+| Standalone neighbors median      | 15.4% |  0.784    |
+| Random forest regressor + NMF latent features | 15.4% |   0.807    |
+| RF regressor + latent features + neighbors median| 12.7% |  0.859    |
 
 See the code for this section in [grid_search.py](/blob/master/code/grid_search.py) and [models.py](/blob/master/code/models.py), although the code for running the standalone neighbors median model is in [featurize.py](/blob/master/code/featurize.py). 
 
