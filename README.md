@@ -7,7 +7,7 @@
 
 San Francisco has one the hottest rental markets in the nation, and immense variation according to location and amenities. My goal is to accurately predict market prices for units anywhere in the city. I accomplish this by applying Natural Language Processing (NLP), binary space partitioning, and tree-based regression methods to 9 months of SF rental listings from craigslist. 
 
-Test the app for yourself at [PriceMyRental.io](pricemyrental.io). I recommend testing using [real craigslist listings!](https://sfbay.craigslist.org/search/sfc/apa)
+Test the app for yourself at [PriceMyRental.io](https://pricemyrental.io). I recommend testing using [real craigslist listings!](https://sfbay.craigslist.org/search/sfc/apa)
 
 ## The Data
 
@@ -45,18 +45,21 @@ Take a look at [featurize.py](/blob/master/code/featurize.py) to review the code
 
 ## Model Selection
 
-To select the regression model, I ran a grid-search on parameters for a random forest regressor and a ridge regressor. The random forest model yielded superior performance, and was the model I used going forward. I compared performance of each layer of feature engineering and modeling to my "baseline" model which used a random forest regressor predicting off of the base-level dataset, which included neighborhood-level price medians, but lacked latent textual features and the nearest-comparables median price. I also tested performance of only using nearest-comparables median price (the "neighbors median" model) as a second baseline. R^2 was calculated using a 70/30 train-test split, except the standalone neighbors median, which needed no training.
+To select the regression model, I ran a grid-search on parameters for a random forest regressor and a ridge regressor. The random forest model yielded superior performance, and was the model I used going forward. I compared performance of each layer of feature engineering and modeling to my "baseline" model which used a random forest regressor predicting off of the base-level dataset, which included neighborhood-level price medians, but lacked latent textual features and the nearest-comparables median price. I also tested performance of only using nearest-comparables median price (the "neighbors median" model) as a second baseline. Mean Absolute Percent Error  was calculated using a 70/30 train-test split, except the standalone neighbors median, which needed no training.
 
 The performance breakdown was as follows:
 
-| Model        | R^2          | 
-| ------------- |:-------------:| 
-| Standalone random forest regressor     | 0.730 | 
-| Standalone neighbors median      | 0.784 |   
-| Random forest regressor + NMF latent features | 0.807 |    
-| RF regressor + latent features + neighbors median| 0.856 |
+| Model        |  Mean Absolute Error  |Mean Absolute Percent Error    | R^2 |
+| ------------- |:---------------------:|:---------------------------:|:-----:|
+| Standalone random forest regressor|   600.8  | 19.5% | 0.730 |
+| Standalone neighbors median|    450.9  | 15.4% |  0.784    |
+| Random forest regressor + NMF latent features| 467.7| 15.4% |   0.807    |
+| RF regressor + latent features + neighbors median| 379.8|  12.7% |  0.859    |
 
 See the code for this section in [grid_search.py](/blob/master/code/grid_search.py) and [models.py](/blob/master/code/models.py), although the code for running the standalone neighbors median model is in [featurize.py](/blob/master/code/featurize.py). 
+
+#### Market Trend Adjustment
+It's an obvious concern when using rental data, particularly in San Francisco, that a model trained on past data would produce less valid predictions over time. With that in mind, I did add a seasonal adjustment feature to the final dataset and ran it through my final model to see if I would get improved results. The adjustment consisted of a 'month' term, 0-8, meaning what month the data originated from. To my surprise, adding this term produced no noticeable change in the performance of the final model, so I left it out of my final dataset. As time goes on, however, adding seasonal adjustment, or parsing and training on new data, will certainly be necessary for predictions to remain reliable. 
 
 ## The WebApp
 
