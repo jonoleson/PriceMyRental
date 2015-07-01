@@ -51,15 +51,15 @@ The performance breakdown was as follows:
 
 | Model        | Mean Absolute Percent Error          | 
 | ------------- |:-------------:| 
-| Standalone random forest regressor     | 0.730 | 
-| Standalone neighbors median      | 0.784 |   
-| Random forest regressor + NMF latent features | 0.807 |    
-| RF regressor + latent features + neighbors median| 0.856 |
+| Standalone random forest regressor     | 19.5% | 
+| Standalone neighbors median      | 15.4% |   
+| Random forest regressor + NMF latent features | 15.4% |    
+| RF regressor + latent features + neighbors median| 12.7% |
 
 See the code for this section in [grid_search.py](/blob/master/code/grid_search.py) and [models.py](/blob/master/code/models.py), although the code for running the standalone neighbors median model is in [featurize.py](/blob/master/code/featurize.py). 
 
-#### Seasonal Adjustment
-It's an obvious concern when using rental data, particularly in San Francisco, that a model trained on past data would produce less valid predictions over time. With that in mind, I did add a seasonal adjustment feature to the final dataset and ran it through my final model to see if I would get improved results. The adjustment consisted of a 'month' term, 0-8, meaning what month the data originated from. To my surprise, adding this term produced no noticeable change in the performance of the final model, and so I left it out of my final dataset. As time goes on, it may become more necessary, however. 
+#### Market Trend Adjustment
+It's an obvious concern when using rental data, particularly in San Francisco, that a model trained on past data would produce less valid predictions over time. With that in mind, I did add a seasonal adjustment feature to the final dataset and ran it through my final model to see if I would get improved results. The adjustment consisted of a 'month' term, 0-8, meaning what month the data originated from. To my surprise, adding this term produced no noticeable change in the performance of the final model, so I left it out of my final dataset. As time goes on, however, adding seasonal adjustment, or parsing and training on new data, will certainly be necessary for predictions to remain reliable. 
 
 ## The WebApp
 
