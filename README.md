@@ -11,9 +11,9 @@ For instructions on using the web app, [go here](../tree/master/webapp).
 
 ## The Data
 
-I was lucky to get access to 9 months (September 2014-June 2015) of housing rental data for the top 25 metro areas in the US. The data had been scraped and stored in AWS buckets in JSON files. Parsing this data was tricky; some days had no data, and many listings had missing values. To see how I collected the data, refer to [get_data.py](../blob/master/code/get_data.py). The code is written to be able to parse data from all 25 metro areas I have access to, though in practice I only parsed the San Francisco data to intentionally limit the scope of the project. For each listing, I collected the listing ID, location (in coordinates), neighborhood, number of beds, number of baths, the listing description, and parking information.
+I was lucky to get access to 9 months (September 2014-June 2015) of housing rental data for the top 25 metro areas in the US. The data had been scraped and stored in AWS buckets in JSON files. Parsing this data was tricky; some days had no data, and many listings had missing values. To see how I collected the data, refer to [get_data.py](https://github.com/jonoleson/PriceMyRental/blob/master/code/get_data.py). The code is written to be able to parse data from all 25 metro areas I have access to, though in practice I only parsed the San Francisco data to intentionally limit the scope of the project. For each listing, I collected the listing ID, location (in coordinates), neighborhood, number of beds, number of baths, the listing description, and parking information.
 
-Next, I cleaned and de-duplicated the data. I started filtering for data with reliable neighborhood attributes. Then I dropped duplicates according to posting ID and body description text. This alone reduced the rows in the dataset from over 200k to around 75k. To review this code, refer to [clean_data.py](../blob/master/code/clean_data.py). 
+Next, I cleaned and de-duplicated the data. I started filtering for data with reliable neighborhood attributes. Then I dropped duplicates according to posting ID and body description text. This alone reduced the rows in the dataset from over 200k to around 75k. To review this code, refer to [clean_data.py](https://github.com/jonoleson/PriceMyRental/blob/master/code/clean_data.py). 
 
 ## Feature Engineering 
 
@@ -41,7 +41,7 @@ After feature engineering and subsetting for only features used in the final reg
 5. Median price of 10 geographically closest comparables (same number of beds/baths)
 6. 4 latent features extracted from description text
 
-Take a look at [featurize.py](../blob/master/code/featurize.py) to review the code for this section. 
+Take a look at [featurize.py](https://github.com/jonoleson/PriceMyRental/blob/master/code/featurize.py) to review the code for this section. 
 
 ## Model Selection
 
@@ -56,7 +56,7 @@ The performance breakdown was as follows:
 | Random forest regressor + NMF latent features| 467.7| 15.4% |   0.807    |
 | RF regressor + latent features + neighbors median| 379.8|  12.7% |  0.859    |
 
-See the code for this section in [grid_search.py](../blob/master/code/grid_search.py) and [models.py](../blob/master/code/models.py), although the code for running the standalone neighbors median model is in [featurize.py](../blob/master/code/featurize.py). 
+See the code for this section in [grid_search.py](https://github.com/jonoleson/PriceMyRental/blob/master/code/grid_search.py) and [models.py](https://github.com/jonoleson/PriceMyRental/blob/master/code/models.py), although the code for running the standalone neighbors median model is in [featurize.py](https://github.com/jonoleson/PriceMyRental/blob/master/code/featurize.py). 
 
 #### Market Trend Adjustment
 It's an obvious concern when using rental data, particularly in San Francisco, that a model trained on past data would produce less valid predictions over time. With that in mind, I did add a seasonal adjustment feature to the final dataset and ran it through my final model to see if I would get improved results. The adjustment consisted of a 'month' term, 0-8, meaning what month the data originated from. To my surprise, adding this term produced no noticeable change in the performance of the final model, so I left it out of my final dataset. As time goes on, however, adding seasonal adjustment, or parsing and training on new data, will certainly be necessary for predictions to remain reliable. 
@@ -65,7 +65,7 @@ It's an obvious concern when using rental data, particularly in San Francisco, t
 
 I built [PriceMyRental.io](http://pricemyrental.io) on top of the ["Stylish Portfolio"](http://startbootstrap.com/template-overviews/stylish-portfolio/) Bootstrap theme. 
 
-To review the backend code for the app, refer to [app.py](../blob/master/webapp/app.py) and [pricemyrental.py](../blob/master/webapp/pricemyrental.py), which contain the code that runs the app, and makes a prediction based on user input, respectively. 
+To review the backend code for the app, refer to [app.py](https://github.com/jonoleson/PriceMyRental/blob/master/webapp/app.py) and [pricemyrental.py](https://github.com/jonoleson/PriceMyRental/blob/master/webapp/pricemyrental.py), which contain the code that runs the app, and makes predictions based on user input, respectively. 
 
 ## Libraries Used
 
