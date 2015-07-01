@@ -1,0 +1,68 @@
+**Benchmark RF Regressor**
+Method:
+-Get median 1 bedroom values in each neighborhood, add this as a feature
+-User Random Forest Regressor to predict price based on existing numerical features
+
+Results:
+R^2: 0.730
+RMSE: 973.441
+MAE (Mean Absolute Error): 600.843
+MAE Percent: 19.53%
+
+**NMF + RF Regressor**
+Method:
+-On top of benchmark method, add latent features weights derived from the description text 
+-Use Random Forest Regressor to predict price based on these existing numerical features as well as the latent feature weights
+
+Results:
+R^2: 0.807
+RMSE: 805.004
+MAE: 467.659
+MAE Percent: 15.42%  
+
+**Nearest Neighbors**
+Method: 
+-Used a KD-Tree to find the nearest neighbors to the each listing, then take the median of the nearest k listings
+-Ran the KD-Tree based on lat, long, beds, and baths, which risks throwing out some relevant listings when splitting on the medians of the bed and bath fields
+
+Results:
+RMSE: 934.988 with k=20, 883.820 with k=10, 858.585 with k=5
+
+**Nearest Neighbors 2.0**
+Method:
+-Ran the KD-Tree based on only lat and long, then manually extracted the closest listings that had the same layout (# of beds and baths) 
+-This ensured that fewer relevant listings were lost due to the splitting mechanism of the KD-Tree
+
+Results:
+R^2: 0.784
+RMSE: 834.207 with k=5, 831.634 with k=10
+MAE: 450.890
+MAE Percent: 15.37%
+
+**Nearest Neighbors + NMF + RF Regressor**
+Method:
+-Used NMF and the KD-Tree to featurize the df with latent features and the median neighbor price for all the listings
+
+Results:
+R^2: 0.859
+RMSE: 679.786
+MAE: 379.800
+MAE Percent: 12.72%
+
+**Nearest Neighbors/NMF/RF Regressor with seasonal adjustment**
+Method: 
+-Used above method but added an integer month variable (0-9) (treated as categorical by RF Regressor)
+-Tried model with month variable as numerical too
+-Improvement was so trivial that I'm leaving seasonal adjustment out of the production model
+
+Results:
+R^2: 0.8595
+RMSE: 677.360 
+
+****Nearest Neighbors + NMF + RF Regressor with parameter adjustment**
+Method:
+-Same as previous final model but cut out the washer_dryer parameter because it was having irrational effects on novel predictions during app testing.
+
+Results:
+R^2: 0.856
+RMSE: 685.626Featurize dataframe
