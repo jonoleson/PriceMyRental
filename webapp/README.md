@@ -1,4 +1,4 @@
-To try the app, go to PriceMyRental.io. I recommend testing using [listings from this popular classifieds site](https://sfbay.craigslist.org/search/sfc/apa)
+To try the app, go to [PriceMyRental.io](http://pricemyrental.io). I recommend testing using [listings from this popular classifieds site](https://sfbay.craigslist.org/search/sfc/apa)
 
 Question: How might one break this app?
 
