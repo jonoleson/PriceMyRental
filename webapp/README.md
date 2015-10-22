@@ -1,6 +1,4 @@
-## UPDATE: The webapp is currently inactive. I tried to upload and run an updated version on EC2, but there have been errors in running the app that may be due to sklearn updates. Still looking into it. 
-
-### Try the App
+ ### Try the App
 
 To try the app, go to [PriceMyRental.io](http://pricemyrental.io). I recommend testing using [listings from this popular classifieds site.](https://sfbay.craigslist.org/search/sfc/apa)
 
